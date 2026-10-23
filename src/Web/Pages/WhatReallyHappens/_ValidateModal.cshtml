@@ -1,0 +1,31 @@
+@* Is this token real? Opened from the Validate button on the token tabs. *@
+<div class="modal fade" id="validate-modal" tabindex="-1" aria-labelledby="validate-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title h4" id="validate-title">Is this <span id="validate-name" class="mono"></span> real?</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="panel-title">1. The header</div>
+                <pre class="mono-panel json-panel mb-4"><code id="validate-header"></code></pre>
+
+                <div class="panel-title">2. The keys</div>
+                <div id="validate-no-config" class="alert alert-warning d-none">Get the config on tab 1 first. That's where <code>jwks_uri</code> is.</div>
+                <pre id="validate-jwks-request" class="mono-panel url-panel mb-2"></pre>
+                <button id="validate-fetch" type="button" class="btn btn-outline-dark btn-lg mb-3">Fetch keys</button>
+                <div id="validate-keys" class="d-none mb-4">
+                    <div id="validate-jwks-response"></div>
+                </div>
+
+                @* Only once there are keys to check with. *@
+                <div id="validate-checks" class="d-none">
+                    <div class="panel-title">3. The checks</div>
+                    <pre class="mono-panel validate-code mb-3"><code id="validate-code"></code></pre>
+                    <button id="validate-run" type="button" class="btn btn-kac btn-lg px-5 mb-3">Validate</button>
+                    <div id="validate-verdict" class="d-none"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

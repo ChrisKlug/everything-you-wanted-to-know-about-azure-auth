@@ -1,0 +1,25 @@
+@page "/digest"
+@model DigestModel
+@{
+    ViewData["Title"] = "The nightly digest";
+}
+
+<section class="hero">
+    <h1>Your day tomorrow, in your inbox.</h1>
+    <p class="lead">The nightly digest reads everyone's calendar in your organization, with nobody signed in. So an admin turns it on.</p>
+
+    @if (Model.TurnedOn)
+    {
+        <p class="h4 fw-semibold">Turned on.</p>
+    }
+    else
+    {
+        @if (Model.Error is not null)
+        {
+            <p class="text-danger mono">@Model.Error</p>
+        }
+
+        <a class="btn btn-primary btn-lg" href="@Model.ConsentUrl">Turn on the digest</a>
+        <p class="text-secondary small mt-3 mono" style="word-break: break-all">@Model.ConsentUrl</p>
+    }
+</section>

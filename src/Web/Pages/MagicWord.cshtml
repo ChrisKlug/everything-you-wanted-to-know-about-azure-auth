@@ -1,0 +1,14 @@
+@page "/magic-word"
+@model MagicWordModel
+@{
+    ViewData["Title"] = "Ah, ah, ah";
+}
+
+<section class="hero">
+    <h1>Ah, ah, ah! You didn't say the magic word.</h1>
+    <p class="lead">Entra knows who you are. Your organization just isn't a Kick-Ass Calendar customer. Yet.</p>
+    @if (Model.Tenant is not null)
+    {
+        <p class="text-secondary">Your organization: <span class="mono">@Model.Tenant</span></p>
+    }
+</section>

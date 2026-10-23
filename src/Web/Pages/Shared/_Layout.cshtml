@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kick-Ass Calendar</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/highlight/github.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand bg-white border-bottom">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-page="/Index">
+                    <partial name="_Logo" />
+                    <span class="brand-name">Kick-Ass Calendar</span>
+                </a>
+                @if (ViewData["WhatReallyHappens"] is true)
+                {
+                    <a class="badge rounded-pill text-bg-warning text-decoration-none ms-auto" href="/what-really-happens">what really happens</a>
+                }
+                else if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="d-flex align-items-center gap-3 ms-auto">
+                        <a class="text-secondary" href="/digest">Digest</a>
+                        <span class="fw-semibold">@(User.FindFirst("name")?.Value ?? User.Identity.Name)</span>
+                        <img class="user-photo" src="/user/photo" alt="" />
+                        <a class="text-secondary" href="/logout">Logout</a>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+    <main class="container py-4">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/highlight/highlight.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

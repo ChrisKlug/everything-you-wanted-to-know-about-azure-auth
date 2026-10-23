@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src\Api\Api.csproj" />
+    <Project Path="src\Digest\Digest.csproj" />
+    <Project Path="src\Web\Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Infrastructure/">
+    <Project Path="src/Zkd.Demo.Azure.Auth.AppHost/Zkd.Demo.Azure.Auth.AppHost.csproj" />
+    <Project Path="src/Zkd.Demo.Azure.Auth.ServiceDefaults/Zkd.Demo.Azure.Auth.ServiceDefaults.csproj" />
+    <Project Path="src\TokenService\TokenService.csproj" />
+  </Folder>
+</Solution>

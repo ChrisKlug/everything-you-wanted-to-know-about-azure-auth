@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Zkd.Demo.Azure.Auth.Web</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Zkd.Demo.Azure.Auth.ServiceDefaults/Zkd.Demo.Azure.Auth.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.12" />
+    <!-- Step 9: AadIssuerValidator, for the {tenantid} in a multi-tenant issuer. -->
+    <PackageReference Include="Microsoft.IdentityModel.Validators" Version="8.19.2" />
+    <!-- Step 11: ManagedIdentityCredential, for the managed identity's token. -->
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+  </ItemGroup>
+
+</Project>

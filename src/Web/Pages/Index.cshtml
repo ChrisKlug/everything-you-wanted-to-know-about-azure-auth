@@ -1,0 +1,77 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = User.Identity?.IsAuthenticated == true ? "Your day" : "Your day, before it starts";
+}
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <section class="day-view">
+        <div class="d-flex align-items-baseline gap-3 mb-3">
+            <h1 class="h2 fw-bold mb-0">@Model.Date.ToString("dddd d MMMM")</h1>
+            <span class="text-secondary">@Model.Day?.TimeZone</span>
+        </div>
+        <div class="day-grid" style="--hours: @(IndexModel.LastHour - IndexModel.FirstHour)">
+            @for (var hour = IndexModel.FirstHour; hour < IndexModel.LastHour; hour++)
+            {
+                <div class="day-hour"><span class="mono">@hour.ToString("00"):00</span></div>
+            }
+            @foreach (var item in Model.Day?.Events ?? [])
+            {
+                var (top, height) = IndexModel.Position(item);
+                <div class="day-event" style="top: calc(@top.ToString(System.Globalization.CultureInfo.InvariantCulture) * var(--hour-height)); height: calc(@height.ToString(System.Globalization.CultureInfo.InvariantCulture) * var(--hour-height))">
+                    <span class="fw-semibold">@item.Subject</span>
+                    <span class="mono small">@item.Start–@item.End</span>
+                    @if (!string.IsNullOrEmpty(item.Location))
+                    {
+                        <span class="small">@item.Location</span>
+                    }
+                </div>
+            }
+            @if (Model.Day is { Events.Count: 0 })
+            {
+                <div class="day-note">Nothing today. Suspicious.</div>
+            }
+            @if (Model.Day is null)
+            {
+                <div class="day-overlay">
+                    <div>
+                        <div class="h2 fw-bold">Your day is loading. Eventually.</div>
+                        <div class="lead text-secondary">Kick-Ass Calendar is getting its boots on.</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </section>
+}
+else
+{
+    <section class="hero text-center">
+        <h1>Know what your day looks like<br />before it starts.</h1>
+        <p class="lead text-secondary mt-3 mb-4">
+            Kick-Ass Calendar brings your meetings together and sends you a digest of tomorrow, every night.
+        </p>
+        <a class="btn btn-kac btn-lg px-5 py-3" href="/login">Login</a>
+    </section>
+
+    <section class="row g-4 pb-5">
+        <div class="col-md-4">
+            <div class="feature">
+                <h2 class="h5 fw-bold">All your meetings</h2>
+                <p class="text-secondary mb-0">Straight from the calendar you already use. Nothing to import.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature">
+                <h2 class="h5 fw-bold">The nightly digest</h2>
+                <p class="text-secondary mb-0">Tomorrow, summarised, before you go to bed.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature">
+                <h2 class="h5 fw-bold">Built for teams</h2>
+                <p class="text-secondary mb-0">Bring your whole organisation. Your admin will love it.</p>
+            </div>
+        </div>
+    </section>
+}

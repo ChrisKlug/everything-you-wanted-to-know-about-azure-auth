@@ -1,0 +1,50 @@
+@model Zkd.Demo.Azure.Auth.Web.Pages.WhatReallyHappens.IndexModel
+
+<div class="tab-pane fade" id="tab-api" role="tabpanel">
+    <div class="row g-3 mb-4">
+        <div class="col-md-9">
+            <label class="form-label" for="api-url">url</label>
+            <input id="api-url" class="form-control form-control-lg mono" value="https://graph.microsoft.com/v1.0/me" autocomplete="off" spellcheck="false" />
+            @* One list, a section per API. Each option names its API too: a closed list only shows the option. *@
+            <select id="api-preset" class="form-select mono mt-2 w-auto" aria-label="Presets">
+                <option value="">Choose a preset…</option>
+                <optgroup label="Microsoft Graph">
+                    <option value="https://graph.microsoft.com/v1.0/me">Graph /me</option>
+                    <option value="https://graph.microsoft.com/v1.0/me/photo/$value">Graph /me/photo/$value</option>
+                    <option value="https://graph.microsoft.com/v1.0/me/events?$select=subject,start,end&$top=5">Graph /me/events</option>
+                </optgroup>
+                @if (Model.CalendarApiUrl is not null)
+                {
+                    <optgroup label="Kick-Ass Calendar API">
+                        <option value="@Model.CalendarApiUrl/me">Calendar API /me</option>
+                        <option value="@Model.CalendarApiUrl/calendar">Calendar API /calendar</option>
+                        <option value="@Model.CalendarApiUrl/users/damon@kickassdev.se/calendar">Calendar API /users/damon@@kickassdev.se/calendar</option>
+                    </optgroup>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label" for="api-token">token</label>
+            <select id="api-token" class="form-select form-select-lg mono">
+                <option value="access_token">access_token</option>
+                <option value="id_token">id_token</option>
+                <option value="">(none)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="panel-title">The request</div>
+    <pre id="api-request" class="mono-panel url-panel mb-3"></pre>
+
+    <button id="api-send" type="button" class="btn btn-kac btn-lg px-5 mb-4">Send</button>
+
+    <div id="api-result" class="d-none">
+        <details class="collapsible mb-3" open>
+            <summary class="panel-title">The response</summary>
+            <div id="api-response"></div>
+        </details>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-dark d-none" data-goto="refresh">Use the refresh token &rarr;</button>
+        </div>
+    </div>
+</div>

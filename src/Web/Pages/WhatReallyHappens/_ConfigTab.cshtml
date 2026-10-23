@@ -1,0 +1,25 @@
+@model Zkd.Demo.Azure.Auth.Web.Pages.WhatReallyHappens.IndexModel
+
+<div class="tab-pane fade" id="tab-config" role="tabpanel">
+    <div class="mb-3">
+        <label class="form-label" for="config-tenant">tenant</label>
+        <input id="config-tenant" class="form-control form-control-lg mono" value="@Model.Entra.TenantId" autocomplete="off" spellcheck="false" />
+    </div>
+
+    <div class="panel-title">The request</div>
+    <pre id="config-request" class="mono-panel url-panel mb-3"></pre>
+
+    <button id="config-fetch" type="button" class="btn btn-kac btn-lg px-5 mb-4">Fetch</button>
+
+    <div id="config-result" class="d-none">
+        <details class="collapsible mb-4" open>
+            <summary class="panel-title">The response</summary>
+            <div id="config-response"></div>
+        </details>
+        <div class="panel-title">The ones we need</div>
+        <table id="config-summary" class="table table-sm params-table mono mb-3"></table>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-dark d-none" data-goto="challenge">Build the challenge &rarr;</button>
+        </div>
+    </div>
+</div>

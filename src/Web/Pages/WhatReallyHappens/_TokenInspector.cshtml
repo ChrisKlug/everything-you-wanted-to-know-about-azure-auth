@@ -1,0 +1,10 @@
+@model string
+
+@* One column on the Tokens tab. Split and Decode are shared, under both columns. Validate floats on the box. *@
+<section data-token-view="@Model" class="col">
+    <div class="panel-title">@Model</div>
+    <div class="jwt-box">
+        <div data-role="view" class="mono-panel jwt-view"></div>
+        <button data-validate="@Model" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Validate&hellip;</button>
+    </div>
+</section>
