@@ -9,7 +9,7 @@ const Parts = (() => {
             { name: 'client_assertion_type', value: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer', important: true },
             { name: 'client_assertion', value: Wrh.secretMask, important: true },
         ]
-        : [{ name: 'client_secret', value: Wrh.secretMask }];
+        : [{ name: 'client_secret', value: Wrh.secretMask, important: true }];
 
     const tokensFrom = (response, names = ['id_token', 'access_token', 'refresh_token']) => {
         if (response.status !== 200) return {};
@@ -277,7 +277,7 @@ const Parts = (() => {
             { name: 'client_id', value: Wrh.page.clientId },
             { name: 'code', value: state.tokens?.code ?? '', important: true, shorten: true },
             { name: 'redirect_uri', value: Wrh.redirectUri },
-            ...(state.request?.code_verifier ? [{ name: 'code_verifier', value: state.request.code_verifier }] : []),
+            ...(state.request?.code_verifier ? [{ name: 'code_verifier', value: state.request.code_verifier, important: true }] : []),
             ...credential(kind),
         ],
         onResponse: (response, state) => ({ tokens: { ...state.tokens, ...tokensFrom(response) } }),
