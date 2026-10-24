@@ -26,7 +26,7 @@
 
     <section data-section="tokens" class="step-section" hidden>
         <h2 class="step-heading"><span class="step-number">4</span> What the web sends my API</h2>
-        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["access_token"])" />
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["access_token"]))" />
     </section>
 
     <section data-section="obo" class="step-section" hidden>
@@ -37,7 +37,7 @@
 
     <section data-section="obo-tokens" class="step-section" hidden>
         <h2 class="step-heading"><span class="step-number">6</span> What my API got</h2>
-        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["obo_token"])" />
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["obo_token"]))" />
     </section>
 
     <section data-section="api" class="step-section" hidden>

@@ -12,6 +12,10 @@ public record ChallengeOptions(
         scope.EndsWith("/.default") ? string.Join('/', scope.Split('/')[^2..]) : scope.Split('/')[^1];
 }
 
+// The tokens a step shows side by side. Validate: the one shared Split/Decode and a Validate on each, for a token the
+// app checks itself. Otherwise each token decodes on its own.
+public record TokenPairOptions(IReadOnlyList<string> Names, bool Validate = false);
+
 // The calls a step offers, grouped by API, and the tokens it can send.
 public record ApiCallOptions(IReadOnlyList<(string Group, IReadOnlyList<(string Label, string Url)> Calls)> Presets, IReadOnlyList<string> Tokens);
 
