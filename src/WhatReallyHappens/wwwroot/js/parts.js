@@ -499,11 +499,6 @@ const Parts = (() => {
             });
         }
         if (returned) section('callback')?.scrollIntoView({ block: 'start' });
-
-        Wrh.role(root, 'start-over')?.addEventListener('click', () => {
-            store.reset();
-            window.scrollTo({ top: 0 });
-        });
         return store;
     };
 
