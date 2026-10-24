@@ -39,6 +39,8 @@ const Parts = (() => {
                 form: Object.fromEntries(params(state).map(p => [p.name, p.value])),
             });
             store.update({ [responseKey]: response, ...onResponse(response, state) });
+            // Straight to the answer, past any section the tokens just unfolded below it.
+            Wrh.role(root, 'result').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }));
     };
 
