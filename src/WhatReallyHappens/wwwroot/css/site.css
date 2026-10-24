@@ -489,6 +489,12 @@ details.collapsible > summary {
     scroll-margin-top: 1rem;
 }
 
+/* A part of a section the page scrolls to on its own. */
+.step-anchor,
+.modal .response-status {
+    scroll-margin-top: 1rem;
+}
+
 .step-heading {
     display: flex;
     align-items: center;

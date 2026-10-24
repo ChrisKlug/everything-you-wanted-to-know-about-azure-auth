@@ -18,6 +18,12 @@
             @foreach (var (name, options) in new[] { ("response_type", Model.ResponseTypes), ("response_mode", Model.ResponseModes), ("prompt", Model.Prompts) })
             {
                 @if (options.Count == 0) continue;
+                @* Nothing to choose: it's still sent, and the request shows it. *@
+                @if (options.Count == 1)
+                {
+                    <input type="hidden" name="@name" value="@options[0]" />
+                    continue;
+                }
                 <label class="panel-title mono option-label d-block">@name
                     <select name="@name" class="form-select mono mb-3">
                         @foreach (var option in options)
@@ -27,9 +33,14 @@
                     </select>
                 </label>
             }
-            <div class="panel-title option-label">PKCE</div>
-            <label class="form-check"><input class="form-check-input" type="checkbox" name="pkce" checked /> <span class="form-check-label">enabled</span></label>
-            <div class="form-text">Only with a code.</div>
+            @* PKCE protects a code, so a step that never asks for one doesn't offer it. *@
+            @if (Model.ResponseTypes.Any(type => type.Split(' ').Contains("code")))
+            {
+                <div data-role="pkce-option">
+                    <div class="panel-title option-label">PKCE</div>
+                    <label class="form-check"><input class="form-check-input" type="checkbox" name="pkce" checked /> <span class="form-check-label">enabled</span></label>
+                </div>
+            }
         </div>
     </fieldset>
 </form>

@@ -191,6 +191,8 @@ const Validate = (() => {
         state.jwksResponse = response;
         state.jwks = response.status === 200 ? JSON.parse(response.body) : null;
         renderKeys();
+        // Straight to the answer, so the presenter doesn't have to scroll the dialog.
+        $('validate-jwks-response').querySelector('.response-status')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
 
     runButton.addEventListener('click', () => Wrh.busy(runButton, async () => {

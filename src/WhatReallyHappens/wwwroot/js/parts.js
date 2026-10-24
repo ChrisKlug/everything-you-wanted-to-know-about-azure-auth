@@ -61,12 +61,19 @@ const Parts = (() => {
         sendButton.addEventListener('click', () => Wrh.busy(sendButton, async () => {
             const response = await Wrh.send({ method: 'GET', url: `${Wrh.page.instance}${tenant.value.trim()}${path}` });
             store.update({ tenant: tenant.value.trim(), configResponse: response, config: response.status === 200 ? JSON.parse(response.body) : null });
+            // Straight to the answer, so the presenter doesn't have to scroll.
+            Wrh.role(root, 'result').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }));
 
         store.onChange(state => {
             Wrh.role(root, 'result').classList.toggle('d-none', !state.configResponse);
             if (!state.configResponse) return;
             Wrh.renderResponse(Wrh.role(root, 'response'), state.configResponse);
+            // The lines the table below pulls out, so they can be found in the whole document first. Top level only:
+            // mtls_endpoint_aliases has a token_endpoint of its own.
+            for (const line of Wrh.role(root, 'response').querySelectorAll('.json-line')) {
+                if (interesting.includes(line.textContent.match(/^ {2}"([^"]+)":/)?.[1])) line.classList.add('json-important');
+            }
             const summary = Wrh.role(root, 'summary');
             summary.replaceChildren();
             for (const name of interesting) {
@@ -82,6 +89,7 @@ const Parts = (() => {
     const challenge = (root, store, stepName, { tenant } = {}) => {
         const form = Wrh.role(root, 'form');
         const output = Wrh.role(root, 'request');
+        const pkceOption = Wrh.role(root, 'pkce-option');
         const pkcePanel = Wrh.role(root, 'pkce');
         const pkceOutput = Wrh.role(root, 'pkce-output');
         const sendButton = Wrh.role(root, 'send');
@@ -106,7 +114,7 @@ const Parts = (() => {
         const choices = () => ({
             scope: scopeOrder.join(' '),
             ...Object.fromEntries(selects.map(name => [name, form.elements[name].value])),
-            pkce: pkceBox.checked,
+            pkce: !!pkceBox?.checked,
         });
 
         try {
@@ -118,11 +126,12 @@ const Parts = (() => {
                 scopeOrder = [...new Set(['openid', ...scopes])].filter(scope => known.includes(scope));
             }
             for (const name of selects) {
-                if (saved[name] !== undefined && [...form.elements[name].options].some(o => o.value === saved[name])) {
+                const options = form.elements[name].options;
+                if (saved[name] !== undefined && options && [...options].some(o => o.value === saved[name])) {
                     form.elements[name].value = saved[name];
                 }
             }
-            if (typeof saved.pkce === 'boolean') pkceBox.checked = saved.pkce;
+            if (typeof saved.pkce === 'boolean' && pkceBox) pkceBox.checked = saved.pkce;
         } catch { /* nothing saved */ }
 
         const save = () => {
@@ -139,7 +148,7 @@ const Parts = (() => {
 
         // PKCE protects the code, so it only applies when a code is asked for.
         const asksForCode = () => responseType().split(' ').includes('code');
-        const usesPkce = () => asksForCode() && pkceBox.checked;
+        const usesPkce = () => asksForCode() && !!pkceBox?.checked;
 
         const params = () => [
             { name: 'client_id', value: Wrh.page.clientId || '<missing>' },
@@ -160,7 +169,8 @@ const Parts = (() => {
         const buildUrl = () => `${authorize}?${params().map(p => `${p.name}=${encodeURIComponent(p.value)}`).join('&')}`;
 
         const renderPkce = () => {
-            pkceBox.disabled = !asksForCode();
+            // PKCE only protects a code, so the option is only there when one is asked for.
+            pkceOption?.classList.toggle('d-none', !asksForCode());
             pkcePanel.classList.toggle('d-none', !usesPkce());
             const line = (name, text) => {
                 const element = document.createElement('span');
@@ -179,7 +189,18 @@ const Parts = (() => {
             ? [[Wrh.page.instance], [tenant, true], ['/oauth2/v2.0/authorize']]
             : [[authorize]];
 
+        // Tokens never go in the query string: they'd end up in server logs and browser history.
+        const renderResponseModes = () => {
+            const select = form.elements.response_mode;
+            if (!select?.options) return;
+            const query = [...select.options].find(o => o.value === 'query');
+            if (!query) return;
+            query.disabled = responseType().split(' ').some(type => type.endsWith('token'));
+            if (query.disabled && query.selected) select.value = [...select.options].find(o => !o.disabled).value;
+        };
+
         const render = () => {
+            renderResponseModes();
             Wrh.renderRequest(output, { method: 'GET', url: urlParts(), params: params() });
             renderPkce();
         };
@@ -197,9 +218,10 @@ const Parts = (() => {
 
         sendButton.addEventListener('click', () => {
             const url = buildUrl();
-            // A new sign-in starts the step's story over.
+            // A new sign-in starts the step's story over, from the sign-in on. Where everything is stays known.
+            const { tenant: configTenant, config, configResponse } = store.state;
             store.reset();
-            store.update({ request: { state, nonce, ...choices(), ...(usesPkce() ? { code_verifier: codeVerifier } : {}) } });
+            store.update({ tenant: configTenant, config, configResponse, request:{ state, nonce, ...choices(), ...(usesPkce() ? { code_verifier: codeVerifier } : {}) } });
             Wrh.signIn(url);
         });
     };

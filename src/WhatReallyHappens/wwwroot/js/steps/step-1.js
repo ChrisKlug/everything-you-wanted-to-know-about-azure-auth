@@ -6,6 +6,7 @@
         callback: Parts.callbackView,
         tokens: Parts.tokenPair,
     }, {
+        challenge: s => !!s.config,
         callback: s => !!s.callback,
         tokens: s => !!s.tokens?.id_token,
     }, { fold: 'challenge' });

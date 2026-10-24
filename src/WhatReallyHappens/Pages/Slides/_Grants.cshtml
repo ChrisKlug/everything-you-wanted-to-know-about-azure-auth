@@ -1,7 +1,7 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides.Grants
 @{
     // The registration in my tenant, an enterprise app in each tenant that uses it, and the grants on those.
-    var height = Model.Detailed ? 470 : 330;
+    const int height = 470;
 }
 <svg class="grants" viewBox="0 0 1100 @height" role="img" aria-label="App registration, enterprise apps and grants">
     @Svg.Text(30, 34, "grants-tenant", "My tenant", "start")
@@ -29,13 +29,10 @@
         @Svg.Text(x + 20, 224, "grants-title", label, "start")
         @Svg.Text(x + 20, 252, "grants-sub", sub, "start")
 
-        @if (Model.Detailed)
-        {
-            <path class="grants-link" d="M@(x + 40) 270 V 330 H @(x + 70)" />
-            <path class="grants-link" d="M@(x + 40) 270 V 410 H @(x + 70)" />
-            @Svg.Text(x + 80, 336, "grants-item", "oauth2PermissionGrants: delegated", "start")
-            @Svg.Text(x + 80, 362, "grants-sub", "Principal: one user · AllPrincipals: admin, everyone", "start")
-            @Svg.Text(x + 80, 416, "grants-item", "appRoleAssignments: application", "start")
-        }
+        <path class="grants-link" d="M@(x + 40) 270 V 330 H @(x + 70)" />
+        <path class="grants-link" d="M@(x + 40) 270 V 410 H @(x + 70)" />
+        @Svg.Text(x + 80, 336, "grants-item", "oauth2PermissionGrants: delegated", "start")
+        @Svg.Text(x + 80, 362, "grants-sub", "Principal: one user · AllPrincipals: admin, everyone", "start")
+        @Svg.Text(x + 80, 416, "grants-item", "appRoleAssignments: application", "start")
     }
 </svg>

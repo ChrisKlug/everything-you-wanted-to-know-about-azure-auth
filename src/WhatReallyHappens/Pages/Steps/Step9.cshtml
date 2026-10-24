@@ -7,14 +7,14 @@
 
 <div id="step" class="step">
     <section data-section="challenge" class="step-section collapsible-section">
-        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> The app sends Hammond to Entra, any organization</h2>
+        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> Signing in: the app sends the user to Entra, any organization</h2>
         <div class="step-body">
             <partial name="_Challenge" model="Model.Login" />
         </div>
     </section>
 
     <section data-section="callback" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">2</span> Entra sends him back</h2>
+        <h2 class="step-heading"><span class="step-number">2</span> Entra sends the user back</h2>
         <partial name="_CallbackView" />
     </section>
 

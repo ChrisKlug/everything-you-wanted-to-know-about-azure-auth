@@ -95,11 +95,8 @@ builder.AddProject<Projects.Digest>("digest")
 
 builder.AddProject<Projects.Web>("web")
     .WithReference(calendarApi)
-    .WithEnvironment("CalendarApi__ClientId", calendarApiClientId)
-    // A demo shortcut, for What really happens: a real web never holds the API's or the Digest's secret.
-    .WithEnvironment("CalendarApi__ClientSecret", calendarApiClientSecret)
+    // The digest's admin consent page asks for the Digest registration by client ID.
     .WithEnvironment("Digest__ClientId", digestClientId)
-    .WithEnvironment("Digest__ClientSecret", digestClientSecret)
     .WithEnvironment("Customers__TenantIds", customerTenants)
     .WithEnvironment("Entra__TenantId", tenantId)
     .WithEnvironment("Entra__ClientId", webClientId)
@@ -107,7 +104,6 @@ builder.AddProject<Projects.Web>("web")
     .WithEnvironment("IDENTITY_ENDPOINT", ReferenceExpression.Create($"{tokenService.GetEndpoint("http")}/msi/token"))
     .WithEnvironment("IDENTITY_HEADER", identityHeader)
     .WithEnvironment("Entra__ManagedIdentityResourceId", $"{identities}/kickass-calendar-web")
-    // One callback for all the links. Per-endpoint callbacks also apply to URLs added for the same endpoint.
     .WithUrls(context =>
     {
         foreach (var url in context.Urls.ToList())
@@ -116,12 +112,6 @@ builder.AddProject<Projects.Web>("web")
             {
                 case "https":
                     url.DisplayText = "Home";
-                    context.Urls.Add(new()
-                    {
-                        Url = $"{url.Url.TrimEnd('/')}/what-really-happens",
-                        DisplayText = "What really happens",
-                        Endpoint = url.Endpoint,
-                    });
                     break;
                 case "http":
                     url.DisplayLocation = UrlDisplayLocation.DetailsOnly;

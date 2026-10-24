@@ -12,7 +12,7 @@ public record Sequence(IReadOnlyList<string> Lanes, IReadOnlyList<Message> Messa
 public record Message(int From, int To, string Text, bool Answer = false, bool Important = false);
 
 // The two objects and where grants live. Tenants: my tenant, or mine and InGen's.
-public record Grants(bool SecondTenant, bool Detailed);
+public record Grants(bool SecondTenant);
 
 public record Table(IReadOnlyList<string> Columns, IReadOnlyList<IReadOnlyList<string>> Rows);
 
@@ -28,20 +28,7 @@ public static class SlideDeck
                 new(2, 0, "302 /callback#id_token=…", Answer: true),
                 new(0, 1, "the id_token, in the fragment or a form post"),
                 new(1, 1, "signature, aud, nonce: Damon is signed in"),
-            ]),
-            Points:
-            [
-                "The ID token says who the user is, for my app. That's all it's for.",
-                "It came back through the browser. Fine for who, not for anything that opens doors.",
-                "Every library starts at the openid-configuration: where everything is.",
-            ]),
-        new("two-objects", 1, "Two objects", Grants: new(SecondTenant: false, Detailed: false),
-            Points:
-            [
-                "The app registration is the store listing: one, in the publisher's tenant.",
-                "The enterprise app is the installed copy: one per tenant that uses it. Consent lives here.",
-                "API permissions on the registration are what the app declares. The enterprise app has what it got.",
-            ]),
+            ])),
 
         new("code-flow", 2, "The code flow",
             new(["Browser", "Kick-Ass Calendar", "Entra", "Graph"],
@@ -155,7 +142,7 @@ public static class SlideDeck
                 "Authenticated isn't authorized: any app in the tenant can get a token for my API.",
                 ".default is the only scope there is. An admin grants, nobody consents.",
             ]),
-        new("grants", 7, "Where grants live", Grants: new(SecondTenant: false, Detailed: true),
+        new("grants", 7, "Where grants live", Grants: new(SecondTenant: false),
             Points:
             [
                 "Two objects, same appId, different id.",
@@ -195,7 +182,7 @@ public static class SlideDeck
                 "A demo trick. Locally you'd normally just be yourself, with DefaultAzureCredential.",
             ]),
 
-        new("two-tenants", 9, "Another organization installs it", Grants: new(SecondTenant: true, Detailed: true),
+        new("two-tenants", 9, "Another organization installs it", Grants: new(SecondTenant: true),
             Points:
             [
                 "One registration, an enterprise app in every tenant that uses it: same Application ID, different Object ID.",
