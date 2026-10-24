@@ -26,7 +26,7 @@ public class Step2Model(IConfiguration configuration) : StepModel(configuration)
         [("profile", true), ("email", true), ("User.Read", false)], ["id_token", "code"], [], []);
 
     public override ApiCallOptions Api => new(
-        [("Microsoft Graph", [Apis.Graph("/me"), Apis.Graph("/me/photo/$value")])],
+        [("Microsoft Graph", [Apis.Graph("/me/photo/$value")])],
         ["id_token", "access_token"]);
 }
 

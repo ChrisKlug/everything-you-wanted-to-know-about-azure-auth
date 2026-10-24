@@ -1,24 +1,33 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared.ApiCallOptions
 
 @* Call something with a bearer token. Any token the step has, so we can see what happens with the wrong one. *@
+@{
+    var single = Model.Presets.Sum(group => group.Calls.Count) == 1;
+}
 <div class="row g-3 mb-4">
-    <div class="col-md-9">
-        <label class="form-label d-block">url
-            <input data-role="url" class="form-control form-control-lg mono" value="@Model.Presets[0].Calls[0].Url" autocomplete="off" spellcheck="false" />
-        </label>
-        <select data-role="preset" class="form-select mono mt-2 w-auto" aria-label="Presets">
-            <option value="">Choose a preset…</option>
-            @foreach (var (group, calls) in Model.Presets)
-            {
-                <optgroup label="@group">
-                    @foreach (var (label, url) in calls)
+    @if (single)
+    {
+        @* Nothing to choose: the request shows it. *@
+        <input type="hidden" data-role="url" value="@Model.Presets[0].Calls[0].Url" />
+    }
+    else
+    {
+        <div class="col-md-9">
+            <label class="form-label d-block">url
+                <select data-role="url" class="form-select form-select-lg mono">
+                    @foreach (var (group, calls) in Model.Presets)
                     {
-                        <option value="@url">@label</option>
+                        <optgroup label="@group">
+                            @foreach (var (_, url) in calls)
+                            {
+                                <option value="@url">@url</option>
+                            }
+                        </optgroup>
                     }
-                </optgroup>
-            }
-        </select>
-    </div>
+                </select>
+            </label>
+        </div>
+    }
     <div class="col-md-3">
         <label class="form-label d-block">token
             <select data-role="token" class="form-select form-select-lg mono">
@@ -35,7 +44,7 @@
 <div class="panel-title">The request</div>
 <pre data-role="request" class="mono-panel url-panel mb-3"></pre>
 <button data-role="send" type="button" class="btn btn-kac btn-lg px-5 mb-4">Send</button>
-<div data-role="result" class="d-none">
+<div data-role="result" class="d-none step-anchor">
     <div class="panel-title">The response</div>
     <div data-role="response"></div>
 </div>
