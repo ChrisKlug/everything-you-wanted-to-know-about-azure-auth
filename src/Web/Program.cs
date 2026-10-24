@@ -6,6 +6,22 @@ builder.Services.AddRazorPages();
 builder.Services.AddHttpClient("graph", client => client.BaseAddress = new Uri("https://graph.microsoft.com/v1.0/"));
 builder.Services.AddHttpClient("calendar-api", client => client.BaseAddress = new Uri("https+http://calendar-api"));
 
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultScheme = "Cookies";
+        options.DefaultChallengeScheme = "OpenIdConnect";
+    })
+    .AddCookie()
+    .AddOpenIdConnect(options =>
+    {
+        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["Entra:TenantId"]}/v2.0";
+        options.ClientId = builder.Configuration["Entra:ClientId"];
+        options.ClientSecret = builder.Configuration["Entra:ClientSecret"];
+        options.ResponseType = "code";
+        options.Scope.Add("User.Read");
+        options.SaveTokens = true;
+    });
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
