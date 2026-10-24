@@ -18,6 +18,9 @@ public record Table(IReadOnlyList<string> Columns, IReadOnlyList<IReadOnlyList<s
 
 public static class SlideDeck
 {
+    // The steps on the start page. After the last one, Next goes back there.
+    public const int LastStep = 11;
+
     public static readonly IReadOnlyList<Slide> All =
     [
         new("id-token", 1, "Signing in with an ID token",
@@ -41,13 +44,7 @@ public static class SlideDeck
                 new(2, 1, "id_token + access_token (aud: Graph)", Answer: true),
                 new(1, 3, "GET /me/photo/$value  Bearer access_token"),
                 new(3, 1, "the picture", Answer: true),
-            ]),
-            Points:
-            [
-                "Only the code goes through the browser. It's useless without the secret and the verifier.",
-                "ID token: who Damon is, for my app. Access token: what my app may call, for Graph.",
-                "PKCE: whoever started the sign-in is the one who finishes it.",
-            ]),
+            ])),
 
         new("one-audience", 3, "One token, one audience",
             new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
@@ -58,13 +55,7 @@ public static class SlideDeck
                 new(2, 2, "aud is me, scp has KickAssCalendar.Read"),
                 new(2, 3, "the same token, passed on"),
                 new(3, 2, "401: not for Graph", Answer: true, Important: true),
-            ]),
-            Points:
-            [
-                "A token is for one API. Ask for two resources and the first one wins, without a word.",
-                "The API a token is for decides its version: requestedAccessTokenVersion, in the manifest.",
-                "knownClientApplications: the API vouches for its own front end, so one consent screen.",
-            ]),
+            ])),
 
         new("validation", 4, "How my API knows it's real",
             new(["Calendar API", "Entra"],
@@ -74,13 +65,7 @@ public static class SlideDeck
                 new(0, 1, "GET jwks_uri  (once, then cached)"),
                 new(1, 0, "the public keys, each with a kid", Answer: true),
                 new(0, 0, "every request: key by kid, signature, iss, aud, nbf/exp", Important: true),
-            ]),
-            Points:
-            [
-                "A valid signature only says Entra issued it. A token for someone else's API is just as valid.",
-                "That's why iss and aud are checks of their own.",
-                "AddJwtBearer() does all of it, and caches the keys.",
-            ]),
+            ])),
 
         new("refresh", 5, "One refresh token, any API",
             new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
@@ -91,13 +76,7 @@ public static class SlideDeck
                 new(0, 1, "grant_type=refresh_token  scope=User.Read", Important: true),
                 new(1, 0, "access_token (Graph) + a new refresh_token", Answer: true),
                 new(0, 3, "GET /me/photo/$value"),
-            ]),
-            Points:
-            [
-                "One refresh token gets a token for any API the user has consented to. That's Entra, not plain OAuth.",
-                "Anything new needs the user in front of the screen (AADSTS65001).",
-                "Use the new refresh token each time. Let a library keep them.",
-            ]),
+            ])),
 
         new("on-behalf-of", 6, "On-Behalf-Of",
             new(["Kick-Ass Calendar", "Calendar API", "Entra", "Graph"],
@@ -109,13 +88,7 @@ public static class SlideDeck
                 new(1, 3, "GET /me/calendarView"),
                 new(3, 1, "Damon's day", Answer: true),
                 new(1, 0, "Damon's day", Answer: true),
-            ]),
-            Points:
-            [
-                "The API is the one asking, so the API needs the consent. AADSTS65001 says so, by name.",
-                ".default and knownClientApplications put the API's needs on the user's consent screen.",
-                "A new permission later: an admin grants it first, or the web sends the user back with prompt=consent.",
-            ]),
+            ])),
         new("who-consented", 6, "Who consented to what",
             Table: new(["Who may", "Call", "As Damon, for", "Consented"],
             [
@@ -135,20 +108,8 @@ public static class SlideDeck
                 new(2, 1, "client_credentials, as the API itself  scope=graph/.default"),
                 new(1, 2, "access_token  roles: Calendars.Read", Answer: true),
                 new(2, 3, "GET /users/damon@kickassdev.se/calendarView"),
-            ]),
-            Points:
-            [
-                "Scopes are for a user through an app. Roles are for an app on its own.",
-                "Authenticated isn't authorized: any app in the tenant can get a token for my API.",
-                ".default is the only scope there is. An admin grants, nobody consents.",
-            ]),
-        new("grants", 7, "Where grants live", Grants: new(SecondTenant: false),
-            Points:
-            [
-                "Two objects, same appId, different id.",
-                "Delegated: oauth2PermissionGrants. Application: appRoleAssignments. Both on the enterprise app.",
-                "The registration only shows them. \"Granted for Kick-Ass Development\" is the enterprise app's.",
-            ]),
+            ])),
+        new("grants", 7, "Where grants live", Grants: new(SecondTenant: false)),
 
         new("managed-identity", 8, "A managed identity, in Azure",
             new(["Digest", "Azure platform", "Entra", "SQL, my API"],
@@ -158,12 +119,7 @@ public static class SlideDeck
                 new(2, 1, "access_token", Answer: true),
                 new(1, 0, "access_token", Answer: true),
                 new(0, 3, "connect, call, with the token"),
-            ]),
-            Points:
-            [
-                "To the SDK a managed identity is two variables and an HTTP call.",
-                "No secret anywhere in the app. The platform proves who it is.",
-            ]),
+            ])),
         new("managed-identity-local", 8, "The same, on my laptop",
             new(["Digest", "Token service", "Google", "Entra"],
             [
@@ -174,21 +130,9 @@ public static class SlideDeck
                 new(3, 3, "federated credential: issuer, subject, audience match"),
                 new(3, 1, "the managed identity's access_token", Answer: true),
                 new(1, 0, "what App Service would answer", Answer: true),
-            ]),
-            Points:
-            [
-                "Entra trusts whatever issuer you tell it to, as long as issuer, subject and audience match.",
-                "Powerful, and why a sloppy federated credential is dangerous.",
-                "A demo trick. Locally you'd normally just be yourself, with DefaultAzureCredential.",
-            ]),
+            ])),
 
-        new("two-tenants", 9, "Another organization installs it", Grants: new(SecondTenant: true),
-            Points:
-            [
-                "One registration, an enterprise app in every tenant that uses it: same Application ID, different Object ID.",
-                "Nedry's admin consent is AllPrincipals: everyone at InGen.",
-                "Entra says who they are. Whether their organization is a customer is my job: the tid list.",
-            ]),
+        new("two-tenants", 9, "Another organization installs it", Grants: new(SecondTenant: true)),
 
         new("across-tenants", 10, "The digest in InGen's tenant",
             new(["Digest", "Azure platform", "Entra, InGen", "Graph"],
@@ -199,13 +143,7 @@ public static class SlideDeck
                 new(2, 2, "the Digest trusts my managed identity; Nedry granted Calendars.Read"),
                 new(2, 0, "access_token  tid: InGen  roles: Calendars.Read", Answer: true),
                 new(0, 3, "GET /users/john.hammond@ingendino.se/calendarView"),
-            ]),
-            Points:
-            [
-                "A managed identity only exists in my tenant. The Digest registration is who the digest is in InGen.",
-                "The first token proves who the digest is. The second is who it is in InGen.",
-                "Nedry granted it on purpose, for the digest only. He can take it away again.",
-            ]),
+            ])),
 
         new("no-secrets", 11, "No secrets anywhere",
             new(["Kick-Ass Calendar", "Azure platform", "Entra"],
@@ -215,13 +153,7 @@ public static class SlideDeck
                 new(0, 2, "POST /token  code + client_assertion=that token", Important: true),
                 new(2, 2, "Kick-Ass Calendar trusts kickass-calendar-web"),
                 new(2, 0, "id_token + access_token", Answer: true),
-            ]),
-            Points:
-            [
-                "The registration is still who the app is. Only the credential changed.",
-                "User-assigned: it exists before the app, survives redeploys, and slots can share it.",
-                "Web, API or worker: no secrets.",
-            ]),
+            ])),
     ];
 
     public static Slide? Find(string name) => All.FirstOrDefault(slide => slide.Name == name);

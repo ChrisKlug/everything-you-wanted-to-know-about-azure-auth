@@ -5,15 +5,14 @@
     var single = Model.Presets.Sum(group => group.Calls.Count) == 1;
 }
 <div class="row g-3 mb-4">
-    @if (single)
-    {
-        @* Nothing to choose: the request shows it. *@
-        <input type="hidden" data-role="url" value="@Model.Presets[0].Calls[0].Url" />
-    }
-    else
-    {
-        <div class="col-md-9">
-            <label class="form-label d-block">url
+    <div class="col-md-9">
+        <label class="form-label d-block">url
+            @if (single)
+            {
+                <input data-role="url" class="form-control form-control-lg mono" value="@Model.Presets[0].Calls[0].Url" autocomplete="off" spellcheck="false" />
+            }
+            else
+            {
                 <select data-role="url" class="form-select form-select-lg mono">
                     @foreach (var (group, calls) in Model.Presets)
                     {
@@ -25,9 +24,9 @@
                         </optgroup>
                     }
                 </select>
-            </label>
-        </div>
-    }
+            }
+        </label>
+    </div>
     <div class="col-md-3">
         <label class="form-label d-block">token
             <select data-role="token" class="form-select form-select-lg mono">
