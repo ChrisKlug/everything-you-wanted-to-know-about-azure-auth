@@ -14,7 +14,7 @@
 
     <section data-section="tokens" class="step-section" hidden>
         <h2 class="step-heading"><span class="step-number">2</span> What it got</h2>
-        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["access_token"])" />
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["access_token"]))" />
     </section>
 
     <section data-section="api" class="step-section" hidden>

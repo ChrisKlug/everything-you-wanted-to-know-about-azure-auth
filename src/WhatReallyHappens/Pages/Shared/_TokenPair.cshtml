@@ -1,22 +1,33 @@
-@model IReadOnlyList<string>
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared.TokenPairOptions
 
-@* Tokens side by side, one set of buttons, so they can be compared claim by claim. Validate floats on each box. *@
+@* Tokens side by side, so they can be compared claim by claim. A token the app checks itself gets Validate and one set
+   of Split/Decode buttons for all. Any other token is only looked at: a Decode button of its own. *@
 <div data-role="tokens">
-    <div class="row row-cols-1 @(Model.Count > 1 ? "row-cols-lg-2" : "") g-4 mb-3">
-        @foreach (var name in Model)
+    <div class="row row-cols-1 @(Model.Names.Count > 1 ? "row-cols-lg-2" : "") g-4 mb-3">
+        @foreach (var name in Model.Names)
         {
             <section data-token-view="@name" class="col">
                 <div class="panel-title">@Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared.TokenNames.Label(name)</div>
                 <div class="jwt-box">
                     <div data-role="view" class="mono-panel jwt-view"></div>
-                    <button data-role="validate" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Validate&hellip;</button>
+                    @if (Model.Validate)
+                    {
+                        <button data-role="validate" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Validate&hellip;</button>
+                    }
+                    else
+                    {
+                        <button data-role="decode-one" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Decode</button>
+                    }
                 </div>
             </section>
         }
     </div>
-    <div class="d-flex gap-2">
-        <button data-role="split" type="button" class="btn btn-outline-dark btn-lg">Split</button>
-        <button data-role="decode" type="button" class="btn btn-dark btn-lg" disabled>Decode</button>
-        <button data-role="raw" type="button" class="btn btn-link btn-lg d-none">Raw</button>
-    </div>
+    @if (Model.Validate)
+    {
+        <div class="d-flex gap-2">
+            <button data-role="split" type="button" class="btn btn-outline-dark btn-lg">Split</button>
+            <button data-role="decode" type="button" class="btn btn-dark btn-lg" disabled>Decode</button>
+            <button data-role="raw" type="button" class="btn btn-link btn-lg d-none">Raw</button>
+        </div>
+    }
 </div>

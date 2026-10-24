@@ -75,8 +75,9 @@ const Tokens = (() => {
         element.textContent = token || element.dataset.empty || `No ${name} this time.`;
     };
 
-    // Raw -> Split -> Decode, for one or more tokens side by side. One set of buttons, so they change together and
-    // can be compared claim by claim. Each view: <div data-token-view="id_token"> with a [data-role="view"] inside.
+    // Tokens side by side. With one set of buttons (Raw -> Split -> Decode), they change together and can be compared
+    // claim by claim. Without, each token has a Decode button of its own that flips it between raw and decoded.
+    // Each view: <div data-token-view="id_token"> with a [data-role="view"] inside.
     const mountViews = (root, getTokens) => {
         const splitButton = Wrh.role(root, 'split');
         const decodeButton = Wrh.role(root, 'decode');
@@ -85,38 +86,47 @@ const Tokens = (() => {
             name: view.dataset.tokenView,
             element: Wrh.role(view, 'view'),
             validate: Wrh.role(view, 'validate'),
+            decodeOne: Wrh.role(view, 'decode-one'),
+            shown: 'raw',
         }));
-        let shown = 'raw';
+
+        const show = (view, state) => {
+            const token = getTokens()[view.name];
+            view.shown = token ? state : 'raw';
+            try {
+                if (view.shown === 'raw') raw(view.element, token, view.name);
+                else if (view.shown === 'split') split(view.element, token);
+                else decode(view.element, token);
+            } catch (e) {
+                view.shown = 'raw';
+                raw(view.element, token, view.name);
+                alert(`The ${view.name} doesn't decode as a JWT: ${e.message}`);
+            }
+            if (view.validate) view.validate.disabled = !token;
+            if (view.decodeOne) {
+                view.decodeOne.disabled = !token;
+                view.decodeOne.textContent = view.shown === 'decoded' ? 'Raw' : 'Decode';
+            }
+        };
 
         const render = state => {
-            shown = state;
-            const tokens = getTokens();
-            for (const view of views) {
-                const token = tokens[view.name];
-                if (view.validate) view.validate.disabled = !token;
-                try {
-                    if (!token || state === 'raw') raw(view.element, token, view.name);
-                    else if (state === 'split') split(view.element, token);
-                    else decode(view.element, token);
-                } catch (e) {
-                    raw(view.element, token, view.name);
-                    alert(`The ${view.name} doesn't decode as a JWT: ${e.message}`);
-                }
-            }
-            const any = views.some(view => tokens[view.name]);
+            views.forEach(view => show(view, state));
+            if (!splitButton) return;
+            const any = views.some(view => getTokens()[view.name]);
             rawButton.classList.toggle('d-none', state === 'raw');
             splitButton.disabled = state !== 'raw' || !any;
             decodeButton.disabled = state !== 'split';
         };
 
-        splitButton.addEventListener('click', () => render('split'));
-        decodeButton.addEventListener('click', () => render('decoded'));
-        rawButton.addEventListener('click', () => render('raw'));
+        splitButton?.addEventListener('click', () => render('split'));
+        decodeButton?.addEventListener('click', () => render('decoded'));
+        rawButton?.addEventListener('click', () => render('raw'));
         for (const view of views) {
             view.validate?.addEventListener('click', () => Validate.open(view.name, getTokens()[view.name]));
+            view.decodeOne?.addEventListener('click', () => show(view, view.shown === 'decoded' ? 'raw' : 'decoded'));
         }
 
-        // New tokens start raw again.
+        // New tokens start raw again. Otherwise each token stays the way it was.
         let last;
         return () => {
             const current = JSON.stringify(views.map(view => getTokens()[view.name] ?? ''));
@@ -124,7 +134,7 @@ const Tokens = (() => {
                 last = current;
                 render('raw');
             } else {
-                render(shown);
+                views.forEach(view => show(view, view.shown));
             }
         };
     };

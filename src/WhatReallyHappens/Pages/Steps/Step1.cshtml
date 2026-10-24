@@ -25,7 +25,7 @@
 
     <section data-section="tokens" class="step-section" hidden>
         <h2 class="step-heading"><span class="step-number">4</span> What it got</h2>
-        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["id_token"])" />
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["id_token"], Validate: true))" />
     </section>
 
     <partial name="_StepFooter" model="1" />
