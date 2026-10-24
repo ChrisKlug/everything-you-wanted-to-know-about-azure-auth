@@ -1,0 +1,17 @@
+@inject Microsoft.Extensions.Options.IOptions<EntraOptions> Entra
+
+@* Where is everything? Ask the tenant. *@
+<label class="form-label d-block mb-3">tenant
+    <input data-role="tenant" class="form-control form-control-lg mono" value="@Entra.Value.TenantId" autocomplete="off" spellcheck="false" />
+</label>
+<div class="panel-title">The request</div>
+<pre data-role="request" class="mono-panel url-panel mb-3"></pre>
+<button data-role="send" type="button" class="btn btn-kac btn-lg px-5 mb-4">Fetch</button>
+<div data-role="result" class="d-none">
+    <details class="collapsible mb-4">
+        <summary class="panel-title">The response</summary>
+        <div data-role="response"></div>
+    </details>
+    <div class="panel-title">The ones we need</div>
+    <table data-role="summary" class="table table-sm params-table mono mb-3"></table>
+</div>

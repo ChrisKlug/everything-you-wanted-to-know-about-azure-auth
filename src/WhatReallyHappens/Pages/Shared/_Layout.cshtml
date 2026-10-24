@@ -1,0 +1,58 @@
+@inject Microsoft.Extensions.Options.IOptions<EntraOptions> Entra
+@inject IConfiguration Configuration
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - What really happens</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/highlight/github.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+@* What every page's scripts need to know: who the app is, and the other apps a token might be for. *@
+<body data-instance="@Entra.Value.Instance"
+      data-tenant-id="@Entra.Value.TenantId"
+      data-client-id="@Entra.Value.ClientId"
+      data-calendar-api-client-id="@Configuration["CalendarApi:ClientId"]"
+      data-digest-client-id="@Configuration["Digest:ClientId"]">
+    <header>
+        <nav class="navbar navbar-expand bg-white border-bottom">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center gap-2" asp-page="/Index">
+                    <partial name="_Logo" />
+                    <span class="brand-name">What really happens</span>
+                </a>
+                <div class="d-flex align-items-center gap-3 ms-auto">
+                    @if (ViewData["Step"] is string step)
+                    {
+                        <span class="badge rounded-pill text-bg-warning fs-6">@step</span>
+                    }
+                    <button type="button" class="btn btn-outline-dark" data-decode>Decode a token</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container py-4">
+        @if (!Entra.Value.IsConfigured)
+        {
+            <div class="alert alert-danger">
+                <strong>No app registration configured.</strong>
+                Set <code>kickass-tenant-id</code> and <code>web-client-id</code> in the Aspire dashboard.
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <partial name="_DecodeModal" />
+    <partial name="_ValidateModal" />
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/highlight/highlight.min.js"></script>
+    <script src="~/js/core.js" asp-append-version="true"></script>
+    <script src="~/js/tokens.js" asp-append-version="true"></script>
+    <script src="~/js/decode.js" asp-append-version="true"></script>
+    <script src="~/js/validate.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

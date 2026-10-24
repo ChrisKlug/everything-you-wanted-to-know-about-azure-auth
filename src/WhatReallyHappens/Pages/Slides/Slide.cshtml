@@ -1,0 +1,52 @@
+@page "/slides/{name}"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides.SlideModel
+@{
+    ViewData["Title"] = Model.Slide.Title;
+    ViewData["Step"] = $"Step {Model.Slide.Step}";
+}
+
+<article class="slide">
+    <h1 class="slide-title">@Model.Slide.Title</h1>
+
+    @if (Model.Slide.Sequence is not null)
+    {
+        <partial name="_Sequence" model="Model.Slide.Sequence" />
+    }
+    @if (Model.Slide.Grants is not null)
+    {
+        <partial name="_Grants" model="Model.Slide.Grants" />
+    }
+    @if (Model.Slide.Table is { } table)
+    {
+        <table class="table slide-table">
+            <thead><tr>@foreach (var column in table.Columns) { <th>@column</th> }</tr></thead>
+            <tbody>
+                @foreach (var tableRow in table.Rows)
+                {
+                    <tr>@foreach (var cell in tableRow) { <td>@cell</td> }</tr>
+                }
+            </tbody>
+        </table>
+    }
+    @if (Model.Slide.Points is { Count: > 0 } points)
+    {
+        <ul class="slide-points">
+            @foreach (var point in points)
+            {
+                <li>@point</li>
+            }
+        </ul>
+    }
+
+    <nav class="slide-nav">
+        <a class="btn btn-outline-dark" href="/step-@Model.Slide.Step">&larr; Back to step @Model.Slide.Step</a>
+        @if (Model.Previous is not null)
+        {
+            <a class="btn btn-outline-dark" href="/slides/@Model.Previous.Name">&larr; @Model.Previous.Title</a>
+        }
+        @if (Model.Next is not null)
+        {
+            <a class="btn btn-kac ms-auto" href="/slides/@Model.Next.Name">@Model.Next.Title &rarr;</a>
+        }
+    </nav>
+</article>

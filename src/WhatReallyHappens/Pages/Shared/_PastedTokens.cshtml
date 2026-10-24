@@ -1,0 +1,24 @@
+@model IReadOnlyList<(string Name, string Label)>
+
+@* Tokens from a log, pasted in and looked at side by side. *@
+<div data-role="tokens">
+    <div class="row row-cols-1 @(Model.Count > 1 ? "row-cols-lg-2" : "") g-4 mb-3">
+        @foreach (var (name, label) in Model)
+        {
+            <section data-token-view="@name" class="col">
+                <label class="panel-title d-block">@label
+                    <textarea data-paste="@name" class="form-control mono mt-1 mb-2" rows="2" spellcheck="false" placeholder="Paste it here"></textarea>
+                </label>
+                <div class="jwt-box">
+                    <div data-role="view" data-empty="Nothing pasted yet." class="mono-panel jwt-view"></div>
+                    <button data-role="validate" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Validate&hellip;</button>
+                </div>
+            </section>
+        }
+    </div>
+    <div class="d-flex gap-2">
+        <button data-role="split" type="button" class="btn btn-outline-dark btn-lg">Split</button>
+        <button data-role="decode" type="button" class="btn btn-dark btn-lg" disabled>Decode</button>
+        <button data-role="raw" type="button" class="btn btn-link btn-lg d-none">Raw</button>
+    </div>
+</div>

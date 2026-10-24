@@ -1,0 +1,732 @@
+/* Projector friendly: big type, light theme, high contrast. */
+:root {
+    --kac-orange: #e8590c;
+    --kac-ink: #1f2937;
+    --jwt-header: #c2255c;
+    --jwt-payload: #6741d9;
+    --jwt-signature: #1971c2;
+}
+
+html {
+    font-size: 20px;
+}
+
+body {
+    color: var(--kac-ink);
+    background: #fff;
+}
+
+.brand-name {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.btn-kac {
+    --bs-btn-bg: var(--kac-orange);
+    --bs-btn-border-color: var(--kac-orange);
+    --bs-btn-color: #fff;
+    --bs-btn-hover-bg: #d9480f;
+    --bs-btn-hover-border-color: #d9480f;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-bg: #c2410c;
+    --bs-btn-active-border-color: #c2410c;
+    font-weight: 700;
+}
+
+/* Landing page */
+.hero {
+    padding: 4rem 0 3rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.hero .lead {
+    font-size: 1.4rem;
+}
+
+.feature {
+    border-left: 4px solid var(--kac-orange);
+    padding-left: 1rem;
+}
+
+/* Calendar */
+.day-grid {
+    --hour-height: 3rem;
+    position: relative;
+    height: calc(var(--hours) * var(--hour-height));
+    border-top: 1px solid #dee2e6;
+}
+
+.day-hour {
+    height: var(--hour-height);
+    border-bottom: 1px solid #dee2e6;
+    padding: 0.2rem 0;
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.day-event {
+    position: absolute;
+    left: 4.5rem;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.75rem;
+    overflow: hidden;
+    padding: 0.2rem 0.6rem;
+    border-left: 4px solid var(--kac-orange);
+    border-radius: 0.3rem;
+    background: #fff4e6;
+    font-size: 0.85rem;
+}
+
+.day-note {
+    position: absolute;
+    top: 1rem;
+    left: 4.5rem;
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+/* The calendar couldn't load. The empty grid shows through. */
+.day-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+/* Signed-in user */
+.user-photo {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--kac-orange);
+}
+
+/* What really happens */
+.response-status {
+    display: inline-block;
+    font-family: var(--bs-font-monospace);
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 0.1rem 0.75rem;
+    border-radius: 0.4rem;
+}
+
+.response-status.ok {
+    color: #2b8a3e;
+    background: #ebfbee;
+}
+
+.response-status.error {
+    color: #c92a2a;
+    background: #fff5f5;
+}
+
+.response-image {
+    display: block;
+    max-width: 240px;
+    border-radius: 0.5rem;
+    border: 1px solid #dee2e6;
+}
+
+.option-panel {
+    height: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+}
+
+.option-panel legend,
+.option-panel .option-label {
+    display: block;
+    float: none;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.85rem;
+}
+
+.option-panel .form-check {
+    display: block;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+}
+
+/* Scopes on my own API are whole URIs. */
+.option-panel .form-check-label {
+    overflow-wrap: anywhere;
+}
+
+.mono,
+.mono-panel,
+.form-control.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.mono-panel {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: .5rem;
+    padding: 1rem 1.25rem;
+    font-size: .9rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 0;
+}
+
+.panel-title {
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: #57606a;
+    margin-bottom: .35rem;
+}
+
+.url-panel .url-line {
+    display: block;
+}
+
+.url-panel .url-param {
+    padding-left: 1.5rem;
+}
+
+.url-panel .url-param,
+.url-panel .url-header {
+    border-radius: .25rem;
+    transition: background-color 1s ease;
+}
+
+.url-panel .url-param.url-form {
+    padding-left: 0;
+}
+
+.url-panel .url-param.changed {
+    background-color: #ffe066;
+    transition: none;
+}
+
+.url-panel .url-method {
+    font-weight: 700;
+}
+
+.url-panel .url-part,
+.url-panel .url-value {
+    color: #57606a;
+}
+
+.url-panel .url-name {
+    color: #0550ae;
+}
+
+/* The parts you get to choose. */
+.url-panel .important,
+.mono-panel .important {
+    color: #9a3412;
+    font-weight: 800;
+    background: #fff4e6;
+    border-radius: .2rem;
+}
+
+.url-panel .expandable,
+.json-panel .expandable {
+    cursor: pointer;
+}
+
+/* json-line sets display too, so the clamp needs both classes to win. */
+.url-panel .clamp,
+.json-panel .json-line.clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.json-panel {
+    max-height: 60vh;
+    overflow: auto;
+}
+
+.json-panel .json-line {
+    display: block;
+}
+
+.json-panel .json-token {
+    word-break: break-all;
+}
+
+.wrh-tabs {
+    gap: .25rem;
+    flex-wrap: wrap;
+}
+
+.wrh-tabs .nav-link {
+    font-weight: 700;
+    color: var(--kac-ink);
+    font-size: .9rem;
+}
+
+.wrh-tabs .nav-link.active {
+    background: var(--kac-orange);
+    color: #fff;
+}
+
+.wrh-tabs .nav-link:disabled {
+    color: #adb5bd;
+}
+
+.jwt-header { color: var(--jwt-header); }
+.jwt-payload { color: var(--jwt-payload); }
+.jwt-signature { color: var(--jwt-signature); }
+
+.jwt-view .jwt-segment {
+    border-left: 4px solid;
+    padding-left: .75rem;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.jwt-view .jwt-segment.jwt-header { border-left-color: var(--jwt-header); }
+.jwt-view .jwt-segment.jwt-payload { border-left-color: var(--jwt-payload); }
+.jwt-view .jwt-segment.jwt-signature { border-left-color: var(--jwt-signature); }
+
+.jwt-view .jwt-dot {
+    font-weight: 800;
+    padding-left: calc(.75rem + 4px);
+}
+
+.jwt-view.decoded .jwt-header,
+.jwt-view.decoded .jwt-payload {
+    color: var(--kac-ink);
+}
+
+/* Validate sits on the token box's top right corner, so both columns line up whatever their height. */
+.jwt-box {
+    position: relative;
+}
+
+/* A gap the size of the button, so the token wraps around it instead of hiding under it. */
+.jwt-box .jwt-view::before {
+    content: '';
+    float: right;
+    width: 6.25rem;
+    height: 1.5rem;
+}
+
+.jwt-box .jwt-validate {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    background: #fff;
+}
+
+.jwt-box .jwt-validate:hover:not(:disabled) {
+    background: var(--bs-dark);
+}
+
+/* Decoded JSON has spaces to wrap at. Raw tokens don't, so only they break anywhere. */
+.jwt-view code.hljs {
+    background: transparent;
+    padding: 0;
+    white-space: pre-wrap;
+    word-break: normal;
+    overflow-wrap: anywhere;
+}
+
+.params-table td:first-child {
+    white-space: nowrap;
+    font-weight: 700;
+    color: #0550ae;
+}
+
+.params-table td:last-child {
+    word-break: break-all;
+}
+
+.form-label {
+    font-weight: 700;
+    margin-bottom: .25rem;
+}
+
+details.collapsible > summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Validating a token */
+.json-panel .json-important {
+    background: #fff3bf;
+}
+
+.json-panel .json-key-kid {
+    font-weight: 700;
+}
+
+.json-panel .jwks-key {
+    display: block;
+    cursor: pointer;
+}
+
+.json-panel .jwks-key:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.json-panel .jwks-key.json-important,
+.json-panel .jwks-key.json-important .json-line {
+    background: #fff3bf;
+}
+
+.validate-code {
+    font-size: 0.8rem;
+}
+
+.validate-code .code-line {
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
+
+.validate-code .check-label {
+    font-family: var(--bs-body-font-family);
+    font-weight: 700;
+    margin-left: 0.5rem;
+}
+
+.validate-code .check-label.pass {
+    color: #2b8a3e;
+}
+
+.validate-code .check-label.fail {
+    color: #c92a2a;
+}
+
+/* A blank line between checks. */
+.validate-code .code-comment:not(:first-child) {
+    margin-top: 1.2em;
+}
+
+.validate-code .code-gutter {
+    display: inline-block;
+    width: 1rem;
+    font-weight: 700;
+}
+
+.validate-code .pass .code-gutter {
+    color: #2b8a3e;
+}
+
+.validate-code .fail {
+    background: #fff5f5;
+}
+
+.validate-code .fail .code-gutter {
+    color: #c92a2a;
+}
+
+.validate-verdict {
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+}
+
+.validate-verdict.ok {
+    color: #2b8a3e;
+    background: #ebfbee;
+}
+
+.validate-verdict.error {
+    color: #c92a2a;
+    background: #fff5f5;
+}
+
+/* Refresh tokens */
+.refresh-chain .refresh-token {
+    display: block;
+    border-radius: .25rem;
+    transition: background-color 1s ease;
+}
+
+.refresh-chain .refresh-token.changed {
+    background-color: #ffe066;
+    transition: none;
+}
+
+.refresh-chain .refresh-label {
+    display: inline-block;
+    min-width: 7.5em;
+    font-family: var(--bs-body-font-family);
+    font-weight: 700;
+}
+
+.refresh-chain .current .refresh-label {
+    color: #2b8a3e;
+}
+
+.refresh-chain .used {
+    color: #adb5bd;
+}
+
+.refresh-chain .used .refresh-value {
+    text-decoration: line-through;
+}
+
+/* A step: one page, sections that unfold in order. */
+.step-section {
+    margin-bottom: 3rem;
+    scroll-margin-top: 1rem;
+}
+
+.step-heading {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    background: var(--kac-orange, #e8590c);
+    color: #fff;
+    font-size: 1.1rem;
+    flex: none;
+}
+
+.step-note {
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.step-list .list-group-item {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    font-size: 1.25rem;
+    padding: 1rem 1.25rem;
+}
+
+.step-list .step-label {
+    font-weight: 700;
+    color: var(--kac-orange);
+    min-width: 4.5rem;
+}
+
+/* A section that folds away under its heading. */
+.collapsible-section .step-heading {
+    cursor: pointer;
+}
+
+.collapsible-section .step-heading::after {
+    content: "▾";
+    color: #6b7280;
+    font-size: 1.1rem;
+}
+
+.collapsible-section.collapsed .step-heading::after {
+    content: "▸";
+}
+
+.collapsible-section.collapsed .step-body {
+    display: none;
+}
+
+.step-list .step-link {
+    display: flex;
+    gap: .75rem;
+    color: inherit;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.step-list .step-link:hover {
+    color: var(--kac-orange);
+}
+
+.step-list .step-slides {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .25rem 1rem;
+    margin-left: auto;
+    font-size: 1rem;
+}
+
+.step-list .step-slides a {
+    color: #6b7280;
+}
+
+.step-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1.5rem;
+}
+
+/* "This is what happened": big enough for the back row. */
+.slide-title {
+    font-size: 2.6rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.slide-points {
+    font-size: 1.5rem;
+    line-height: 1.5;
+    margin: 2rem 0;
+    padding-left: 1.5rem;
+}
+
+.slide-points li {
+    margin-bottom: .5rem;
+}
+
+.slide-table {
+    font-size: 1.25rem;
+    margin: 1rem 0 2rem;
+}
+
+.slide-table th {
+    color: #6b7280;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.slide-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 1.5rem;
+}
+
+svg.sequence, svg.grants {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.sequence .seq-lane {
+    fill: #fff;
+    stroke: var(--kac-ink);
+    stroke-width: 2;
+}
+
+.sequence .seq-lane-text {
+    font: 700 17px -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    fill: var(--kac-ink);
+}
+
+.sequence .seq-lifeline {
+    stroke: #d1d5db;
+    stroke-width: 2;
+    stroke-dasharray: 4 6;
+}
+
+.sequence .seq-arrow {
+    stroke: var(--kac-ink);
+    stroke-width: 2.2;
+}
+
+.sequence .seq-arrow.answer {
+    stroke-dasharray: 8 6;
+}
+
+.sequence .seq-arrow.important, .sequence .seq-head.important {
+    stroke: var(--kac-orange);
+    fill: var(--kac-orange);
+}
+
+.sequence .seq-head {
+    fill: var(--kac-ink);
+}
+
+.sequence .seq-text {
+    font: 15px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    fill: var(--kac-ink);
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 6px;
+    stroke-linejoin: round;
+}
+
+.sequence .seq-text.important {
+    fill: #c2410c;
+    font-weight: 700;
+}
+
+.sequence .seq-note {
+    fill: #fff7ed;
+    stroke: #fdba74;
+    stroke-width: 1.5;
+}
+
+.sequence .seq-note.important {
+    fill: #ffedd5;
+    stroke: var(--kac-orange);
+}
+
+.grants .grants-tenant {
+    font: 700 15px -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    fill: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.grants .grants-divider {
+    stroke: #d1d5db;
+    stroke-width: 2;
+    stroke-dasharray: 6 8;
+}
+
+.grants .grants-box {
+    fill: #fff;
+    stroke: var(--kac-ink);
+    stroke-width: 2;
+}
+
+.grants .grants-box.installed {
+    stroke: var(--kac-orange);
+    fill: #fff7ed;
+}
+
+.grants .grants-title {
+    font: 700 20px -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    fill: var(--kac-ink);
+}
+
+.grants .grants-sub {
+    font: 15px -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    fill: #6b7280;
+}
+
+.grants .grants-item {
+    font: 600 16px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    fill: var(--kac-ink);
+}
+
+.grants .grants-link {
+    fill: none;
+    stroke: var(--kac-ink);
+    stroke-width: 2;
+}

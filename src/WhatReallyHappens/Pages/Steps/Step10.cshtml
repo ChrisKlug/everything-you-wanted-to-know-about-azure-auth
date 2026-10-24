@@ -1,0 +1,21 @@
+@page "/step-10"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step10Model
+@{
+    ViewData["Title"] = "Step 10";
+    ViewData["Step"] = "Step 10: The digest across tenants";
+}
+
+<div id="step" class="step">
+    <section data-section="pasted" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> Two token requests</h2>
+        <p class="step-note">The first proves who the digest is. The second is who it is in InGen. Paste both from the logs.</p>
+        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("exchange_token", "Token for api://AzureADTokenExchange (token service)"), ("graph_token", "Graph token for Hammond (digest)")])" />
+    </section>
+
+    <partial name="_StepFooter" model="10" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-10.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,32 @@
+@page
+@using Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides
+@{
+    ViewData["Title"] = "Steps";
+    var steps = new[]
+    {
+        "App registration and ID token", "Code flow and access token", "Calling my own API", "Validating tokens and the kid",
+        "Refresh tokens across APIs", "On-Behalf-Of", "An app with no user", "Managed identity", "Cross-tenant with InGen",
+        "The digest across tenants", "No secrets anywhere",
+    };
+}
+
+<section class="hero">
+    <h1>What really happens</h1>
+    <p class="lead">Every request the real app makes, by hand. One page per step, each on its own.</p>
+</section>
+
+<div class="list-group step-list">
+    @for (var i = 0; i < steps.Length; i++)
+    {
+        var step = i + 1;
+        <div class="list-group-item">
+            <a class="step-link" href="/step-@step"><span class="step-label">Step @step</span> @steps[i]</a>
+            <span class="step-slides">
+                @foreach (var slide in SlideDeck.ForStep(step))
+                {
+                    <a href="/slides/@slide.Name">@slide.Title</a>
+                }
+            </span>
+        </div>
+    }
+</div>

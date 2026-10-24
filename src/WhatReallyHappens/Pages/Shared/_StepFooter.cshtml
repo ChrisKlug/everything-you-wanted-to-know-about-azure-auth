@@ -1,0 +1,11 @@
+@model int
+@using Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides
+
+@* What happened, as slides, and on to the next step. *@
+<footer class="step-footer">
+    @foreach (var slide in SlideDeck.ForStep(Model))
+    {
+        <a class="btn btn-outline-dark" href="/slides/@slide.Name">@slide.Title &rarr;</a>
+    }
+    <button data-role="start-over" type="button" class="btn btn-link text-secondary ms-auto">Start this step over</button>
+</footer>

@@ -1,0 +1,21 @@
+@page "/step-8"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step8Model
+@{
+    ViewData["Title"] = "Step 8";
+    ViewData["Step"] = "Step 8: Managed identity";
+}
+
+<div id="step" class="step">
+    <section data-section="pasted" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> The tokens from the token service's log</h2>
+        <p class="step-note">On my laptop the token service plays Azure: my Google login in, the managed identity's token out. Paste both from its log.</p>
+        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("google_token", "New Google ID token"), ("managed_identity_token", "Token for https://database.windows.net/")])" />
+    </section>
+
+    <partial name="_StepFooter" model="8" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-8.js" asp-append-version="true"></script>
+}

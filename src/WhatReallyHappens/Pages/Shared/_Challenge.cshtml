@@ -1,0 +1,45 @@
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared.ChallengeOptions
+@using Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared
+
+@* Send the user to Entra. Changes are remembered in the browser, per step. *@
+<form data-role="form" class="row row-cols-1 row-cols-md-2 g-3 mb-4" autocomplete="off">
+    <fieldset class="col">
+        <div class="option-panel">
+            <legend class="panel-title mono">scope</legend>
+            <label class="form-check"><input class="form-check-input" type="checkbox" name="scope" value="openid" checked disabled /> <span class="form-check-label mono">openid</span></label>
+            @foreach (var (scope, isChecked) in Model.Scopes)
+            {
+                <label class="form-check" title="@scope"><input class="form-check-input" type="checkbox" name="scope" value="@scope" checked="@isChecked" /> <span class="form-check-label mono">@ChallengeOptions.Label(scope)</span></label>
+            }
+        </div>
+    </fieldset>
+    <fieldset class="col">
+        <div class="option-panel">
+            @foreach (var (name, options) in new[] { ("response_type", Model.ResponseTypes), ("response_mode", Model.ResponseModes), ("prompt", Model.Prompts) })
+            {
+                @if (options.Count == 0) continue;
+                <label class="panel-title mono option-label d-block">@name
+                    <select name="@name" class="form-select mono mb-3">
+                        @foreach (var option in options)
+                        {
+                            <option value="@option">@(option == "" ? "not sent" : option)</option>
+                        }
+                    </select>
+                </label>
+            }
+            <div class="panel-title option-label">PKCE</div>
+            <label class="form-check"><input class="form-check-input" type="checkbox" name="pkce" checked /> <span class="form-check-label">enabled</span></label>
+            <div class="form-text">Only with a code.</div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="panel-title">The request</div>
+<pre data-role="request" class="mono-panel url-panel mb-3"></pre>
+
+<details data-role="pkce" class="collapsible mb-3 d-none" open>
+    <summary class="panel-title">PKCE</summary>
+    <pre data-role="pkce-output" class="mono-panel url-panel"></pre>
+</details>
+
+<button data-role="send" type="button" class="btn btn-kac btn-lg px-5">Sign in</button>

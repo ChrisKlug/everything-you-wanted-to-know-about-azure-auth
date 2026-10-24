@@ -1,0 +1,37 @@
+@page "/step-1"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step1Model
+@{
+    ViewData["Title"] = "Step 1";
+    ViewData["Step"] = "Step 1: App registration and ID token";
+}
+
+<div id="step" class="step">
+    <section data-section="config" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> Where is everything?</h2>
+        <partial name="_Config" />
+    </section>
+
+    <section data-section="challenge" class="step-section collapsible-section">
+        <h2 class="step-heading" data-role="toggle"><span class="step-number">2</span> The app sends Damon to Entra</h2>
+        <div class="step-body">
+            <partial name="_Challenge" model="Model.Login" />
+        </div>
+    </section>
+
+    <section data-section="callback" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">3</span> Entra sends him back, with an ID token</h2>
+        <partial name="_CallbackView" />
+    </section>
+
+    <section data-section="tokens" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">4</span> What it got</h2>
+        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["id_token"])" />
+    </section>
+
+    <partial name="_StepFooter" model="1" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-1.js" asp-append-version="true"></script>
+}

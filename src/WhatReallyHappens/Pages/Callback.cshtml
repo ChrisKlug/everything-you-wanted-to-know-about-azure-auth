@@ -1,0 +1,16 @@
+@page "/callback"
+@model CallbackModel
+@{
+    ViewData["Title"] = "Back from Entra";
+}
+
+<p class="text-secondary">Back from Entra…</p>
+
+@if (Model.Posted is not null)
+{
+    <script id="posted-parameters" type="application/json">@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Posted))</script>
+}
+
+@section Scripts {
+    <script src="~/js/callback.js" asp-append-version="true"></script>
+}

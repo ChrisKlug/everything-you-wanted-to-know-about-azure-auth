@@ -1,0 +1,31 @@
+@page "/step-7"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step7Model
+@{
+    ViewData["Title"] = "Step 7";
+    ViewData["Step"] = "Step 7: An app with no user";
+}
+
+<div id="step" class="step">
+    <section data-section="client-credentials" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> The digest asks for a token, as itself</h2>
+        <p class="step-note">No redirect, no sign-in, no code. The app's own credentials, straight to the token endpoint.</p>
+        <partial name="_ClientCredentials" />
+    </section>
+
+    <section data-section="tokens" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">2</span> What it got</h2>
+        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["access_token"])" />
+    </section>
+
+    <section data-section="api" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">3</span> With it, it calls my API</h2>
+        <partial name="_ApiCall" model="Model.Api" />
+    </section>
+
+    <partial name="_StepFooter" model="7" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-7.js" asp-append-version="true"></script>
+}

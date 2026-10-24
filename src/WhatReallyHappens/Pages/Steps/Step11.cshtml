@@ -1,0 +1,43 @@
+@page "/step-11"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step11Model
+@{
+    ViewData["Title"] = "Step 11";
+    ViewData["Step"] = "Step 11: No secrets anywhere";
+}
+
+<div id="step" class="step">
+    <section data-section="challenge" class="step-section collapsible-section">
+        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> The app sends Damon to Entra</h2>
+        <div class="step-body">
+            <partial name="_Challenge" model="Model.Login" />
+        </div>
+    </section>
+
+    <section data-section="callback" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">2</span> Entra sends him back</h2>
+        <partial name="_CallbackView" />
+    </section>
+
+    <section data-section="exchange" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">3</span> The app trades the code for tokens, with no secret</h2>
+        <p class="step-note">Instead of a secret, the managed identity's token. The server fills it in, the registration's federated credential trusts it.</p>
+        <partial name="_Exchange" />
+    </section>
+
+    <section data-section="tokens" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">4</span> What it got</h2>
+        <partial name="_TokenPair" model="@((IReadOnlyList<string>)["id_token", "access_token"])" />
+    </section>
+
+    <section data-section="api" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">5</span> With the access token, it calls my API</h2>
+        <partial name="_ApiCall" model="Model.Api" />
+    </section>
+
+    <partial name="_StepFooter" model="11" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-11.js" asp-append-version="true"></script>
+}

@@ -14,6 +14,7 @@
       <ProjectReference Include="..\Digest\Digest.csproj" />
       <ProjectReference Include="..\TokenService\TokenService.csproj" />
       <ProjectReference Include="..\Web\Web.csproj" />
+      <ProjectReference Include="..\WhatReallyHappens\WhatReallyHappens.csproj" />
     </ItemGroup>
 
 </Project>

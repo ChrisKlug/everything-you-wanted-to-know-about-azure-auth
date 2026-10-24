@@ -130,6 +130,36 @@ builder.AddProject<Projects.Web>("web")
         }
     });
 
+// Every request the web makes, by hand, one page per step. It signs in as the web: same registration, same secret.
+builder.AddProject<Projects.WhatReallyHappens>("what-really-happens")
+    .WithReference(calendarApi)
+    .WithEnvironment("Entra__TenantId", tenantId)
+    .WithEnvironment("Entra__ClientId", webClientId)
+    .WithEnvironment("Entra__ClientSecret", webClientSecret)
+    .WithEnvironment("CalendarApi__ClientId", calendarApiClientId)
+    .WithEnvironment("CalendarApi__ClientSecret", calendarApiClientSecret)
+    .WithEnvironment("Digest__ClientId", digestClientId)
+    .WithEnvironment("Digest__ClientSecret", digestClientSecret)
+    // Step 11: the web's managed identity, so the code exchange can do without the secret too.
+    .WithEnvironment("IDENTITY_ENDPOINT", ReferenceExpression.Create($"{tokenService.GetEndpoint("http")}/msi/token"))
+    .WithEnvironment("IDENTITY_HEADER", identityHeader)
+    .WithEnvironment("Entra__ManagedIdentityResourceId", $"{identities}/kickass-calendar-web")
+    .WithUrls(context =>
+    {
+        foreach (var url in context.Urls.ToList())
+        {
+            switch (url.Endpoint?.EndpointName)
+            {
+                case "https":
+                    url.DisplayText = "What really happens";
+                    break;
+                case "http":
+                    url.DisplayLocation = UrlDisplayLocation.DetailsOnly;
+                    break;
+            }
+        }
+    });
+
 builder.Build().Run();
 
 // A fixed value, used until configuration (user secrets, or the dashboard's Set command) has one.

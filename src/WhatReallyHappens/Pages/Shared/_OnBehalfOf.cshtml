@@ -1,0 +1,13 @@
+@inject IConfiguration Configuration
+
+@if (Configuration["CalendarApi:ClientId"] is null or "not-registered-yet")
+{
+    <div class="alert alert-warning">Set <code>calendar-api-client-id</code> in the Aspire dashboard.</div>
+}
+
+@* Only a token for the API can be traded. Entra refuses anything else (AADSTS50013). *@
+<div data-role="wrong-audience" class="alert alert-warning d-none">
+    The access token isn't for the Calendar API. Entra will refuse it (AADSTS50013). Sign in for the API first.
+</div>
+
+<partial name="_TokenRequest" model="@("Exchange")" />

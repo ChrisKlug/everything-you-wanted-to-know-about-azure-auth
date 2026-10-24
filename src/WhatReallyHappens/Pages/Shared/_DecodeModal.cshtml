@@ -1,0 +1,28 @@
+@* Paste any token and look inside, without leaving the page. Opened from "Decode a token" in the top bar. *@
+<div class="modal fade" id="decode-modal" tabindex="-1" aria-labelledby="decode-title" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title h4" id="decode-title">Decode a token</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label" for="decode-input">Paste a token</label>
+                <textarea id="decode-input" class="form-control mono mb-3" rows="3" spellcheck="false"></textarea>
+                <div id="decode-views">
+                    <section data-token-view="token" class="mb-3">
+                        <div class="jwt-box">
+                            <div data-role="view" class="mono-panel jwt-view"></div>
+                            <button data-role="validate" type="button" class="btn btn-outline-dark btn-sm jwt-validate">Validate&hellip;</button>
+                        </div>
+                    </section>
+                    <div class="d-flex gap-2">
+                        <button data-role="split" type="button" class="btn btn-outline-dark btn-lg">Split</button>
+                        <button data-role="decode" type="button" class="btn btn-dark btn-lg" disabled>Decode</button>
+                        <button data-role="raw" type="button" class="btn btn-link btn-lg d-none">Raw</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

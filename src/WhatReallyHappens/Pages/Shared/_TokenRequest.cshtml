@@ -1,0 +1,8 @@
+@* A request to the token endpoint, its button and its answer. The secret is masked here and filled in by the server. *@
+<div class="panel-title">The request</div>
+<pre data-role="request" class="mono-panel url-panel mb-3"></pre>
+<button data-role="send" type="button" class="btn btn-kac btn-lg px-5 mb-4">@(Model as string ?? "Send")</button>
+<div data-role="result" class="d-none">
+    <div class="panel-title">The response</div>
+    <div data-role="response"></div>
+</div>

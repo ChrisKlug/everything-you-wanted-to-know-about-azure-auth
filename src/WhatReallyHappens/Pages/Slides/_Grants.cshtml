@@ -1,0 +1,41 @@
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides.Grants
+@{
+    // The registration in my tenant, an enterprise app in each tenant that uses it, and the grants on those.
+    var height = Model.Detailed ? 470 : 330;
+}
+<svg class="grants" viewBox="0 0 1100 @height" role="img" aria-label="App registration, enterprise apps and grants">
+    @Svg.Text(30, 34, "grants-tenant", "My tenant", "start")
+    @if (Model.SecondTenant)
+    {
+        <line class="grants-divider" x1="590" y1="10" x2="590" y2="@(height - 10)" />
+        @Svg.Text(620, 34, "grants-tenant", "InGen", "start")
+    }
+
+    <rect class="grants-box registration" x="30" y="58" width="420" height="80" rx="12" />
+    @Svg.Text(50, 92, "grants-title", "App registration", "start")
+    @Svg.Text(50, 120, "grants-sub", "the blueprint, the store listing: one, at home", "start")
+
+    <path class="grants-link" d="M140 138 V 190" />
+    @if (Model.SecondTenant)
+    {
+        <path class="grants-link" d="M300 138 V 160 H 760 V 190" />
+    }
+
+    @foreach (var (x, label, sub) in Model.SecondTenant
+        ? new[] { (30.0, "Enterprise app", "installed here: Damon's consent"), (620.0, "Enterprise app", "installed at InGen: Nedry's consent") }
+        : new[] { (30.0, "Enterprise app (service principal)", "the installed copy: what it got here") })
+    {
+        <rect class="grants-box installed" x="@x" y="190" width="440" height="80" rx="12" />
+        @Svg.Text(x + 20, 224, "grants-title", label, "start")
+        @Svg.Text(x + 20, 252, "grants-sub", sub, "start")
+
+        @if (Model.Detailed)
+        {
+            <path class="grants-link" d="M@(x + 40) 270 V 330 H @(x + 70)" />
+            <path class="grants-link" d="M@(x + 40) 270 V 410 H @(x + 70)" />
+            @Svg.Text(x + 80, 336, "grants-item", "oauth2PermissionGrants: delegated", "start")
+            @Svg.Text(x + 80, 362, "grants-sub", "Principal: one user · AllPrincipals: admin, everyone", "start")
+            @Svg.Text(x + 80, 416, "grants-item", "appRoleAssignments: application", "start")
+        }
+    }
+</svg>

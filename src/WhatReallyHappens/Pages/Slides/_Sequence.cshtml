@@ -1,0 +1,47 @@
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides.Sequence
+@{
+    // Lanes spread over the width. Each message gets a row. Labels start at the left end of their arrow, or end at its
+    // right end when they'd run off the page. A rough width per character is enough for that.
+    const double width = 1100, margin = 110, top = 118, row = 62, charWidth = 9.1;
+    var lanes = Model.Lanes.Count;
+    double X(int lane) => lanes == 1 ? width / 2 : margin + lane * (width - 2 * margin) / (lanes - 1);
+    var height = top + Model.Messages.Count * row + 10;
+}
+<svg class="sequence" viewBox="0 0 @width @height" role="img" aria-label="@string.Join(", ", Model.Lanes)">
+    <defs>
+        <marker id="seq-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="seq-head" />
+        </marker>
+        <marker id="seq-arrow-important" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" class="seq-head important" />
+        </marker>
+    </defs>
+    @for (var i = 0; i < lanes; i++)
+    {
+        <line class="seq-lifeline" x1="@X(i)" y1="64" x2="@X(i)" y2="@(height - 4)" />
+        <rect class="seq-lane" x="@(X(i) - 98)" y="12" width="196" height="52" rx="10" />
+        @Svg.Text(X(i), 44, "seq-lane-text", Model.Lanes[i], "middle")
+    }
+    @for (var m = 0; m < Model.Messages.Count; m++)
+    {
+        var message = Model.Messages[m];
+        var y = top + m * row;
+        var important = message.Important ? " important" : "";
+        var textWidth = message.Text.Length * charWidth;
+        if (message.From == message.To)
+        {
+            var boxWidth = textWidth + 28;
+            var left = Math.Clamp(X(message.From) - boxWidth / 2, 6, width - boxWidth - 6);
+            <rect class="seq-note@(important)" x="@left" y="@(y - 22)" width="@boxWidth" height="36" rx="8" />
+            @Svg.Text(left + boxWidth / 2, y + 2, "seq-text", message.Text, "middle")
+            continue;
+        }
+        var x1 = X(message.From);
+        var x2 = X(message.To);
+        var (low, high) = (Math.Min(x1, x2), Math.Max(x1, x2));
+        var fitsFromLeft = low + 10 + textWidth <= width - 6;
+        <line class="seq-arrow@(important)@(message.Answer ? " answer" : "")" x1="@x1" y1="@(y + 8)" x2="@x2" y2="@(y + 8)"
+              marker-end="url(#seq-arrow@(message.Important ? "-important" : ""))" />
+        @Svg.Text(fitsFromLeft ? low + 10 : high - 10, y - 2, "seq-text" + important, message.Text, fitsFromLeft ? "start" : "end")
+    }
+</svg>
