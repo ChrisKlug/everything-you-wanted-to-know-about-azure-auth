@@ -433,7 +433,9 @@ const Parts = (() => {
             });
         };
 
+        // A drop-down when there's a choice, a box when there's only one: change for the first, input for typing.
         url.addEventListener('change', render);
+        url.addEventListener('input', render);
         tokenSelect.addEventListener('change', render);
 
         // The newest token is the one to try. The options are in the order they come in a step.

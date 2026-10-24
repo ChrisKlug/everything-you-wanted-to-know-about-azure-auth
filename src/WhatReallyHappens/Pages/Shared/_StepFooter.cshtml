@@ -1,9 +1,5 @@
 @model int
 @using Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Slides
-@{
-    // The steps on the start page. The last one goes back there.
-    const int lastStep = 11;
-}
 
 @* What happened, as slides, and on to the next step. *@
 <footer class="step-footer">
@@ -11,7 +7,7 @@
     {
         <a class="btn btn-outline-dark" href="/slides/@slide.Name">@slide.Title &rarr;</a>
     }
-    @if (Model < lastStep)
+    @if (Model < SlideDeck.LastStep)
     {
         <a class="btn btn-outline-secondary ms-auto" href="/step-@(Model + 1)">Next: step @(Model + 1) &rarr;</a>
     }

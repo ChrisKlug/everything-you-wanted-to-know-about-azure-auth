@@ -44,9 +44,18 @@
         {
             <a class="btn btn-outline-dark" href="/slides/@Model.Previous.Name">&larr; @Model.Previous.Title</a>
         }
+        @* The next slide of this step, or on to the next step once the step's slides are done. *@
         @if (Model.Next is not null)
         {
-            <a class="btn btn-kac ms-auto" href="/slides/@Model.Next.Name">@Model.Next.Title &rarr;</a>
+            <a class="btn btn-outline-secondary ms-auto" href="/slides/@Model.Next.Name">@Model.Next.Title &rarr;</a>
+        }
+        else if (Model.Slide.Step < SlideDeck.LastStep)
+        {
+            <a class="btn btn-outline-secondary ms-auto" href="/step-@(Model.Slide.Step + 1)">Next: step @(Model.Slide.Step + 1) &rarr;</a>
+        }
+        else
+        {
+            <a class="btn btn-outline-secondary ms-auto" href="/">All steps &rarr;</a>
         }
     </nav>
 </article>
