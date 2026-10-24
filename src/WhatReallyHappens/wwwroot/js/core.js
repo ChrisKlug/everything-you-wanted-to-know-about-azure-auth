@@ -187,11 +187,13 @@ const Wrh = (() => {
     };
 
     // A step's sections unfold in order: each shows once the one above it has something to show. A section that
-    // appears is scrolled into view, so the presenter doesn't have to.
+    // appears is scrolled into view, so the presenter doesn't have to. When several appear at once, the first one: the
+    // presenter reads down from there.
     // A section marked data-quiet appears without scrolling, when the presenter still has the one above to talk about.
     // The numbers count the sections that show, so a skipped one leaves no gap.
     const unfold = (root, rules, state) => {
         let number = 0;
+        let scrolled = false;
         for (const section of root.querySelectorAll('[data-section]')) {
             const show = rules[section.dataset.section]?.(state) ?? true;
             const wasHidden = section.hidden;
@@ -200,8 +202,9 @@ const Wrh = (() => {
                 const badge = section.querySelector('.step-number');
                 if (badge) badge.textContent = ++number;
             }
-            if (show && wasHidden && section.dataset.seen && !('quiet' in section.dataset)) {
+            if (show && wasHidden && section.dataset.seen && !('quiet' in section.dataset) && !scrolled) {
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                scrolled = true;
             }
             section.dataset.seen = 'true';
         }
