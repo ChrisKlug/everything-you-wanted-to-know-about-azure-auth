@@ -409,7 +409,6 @@ const Parts = (() => {
     // Call something with a bearer token.
     const apiCall = (root, store) => {
         const url = Wrh.role(root, 'url');
-        const preset = Wrh.role(root, 'preset');
         const tokenSelect = Wrh.role(root, 'token');
         const output = Wrh.role(root, 'request');
         const sendButton = Wrh.role(root, 'send');
@@ -434,17 +433,8 @@ const Parts = (() => {
             });
         };
 
-        // The preset list shows which preset the URL is, or none once it's been typed over.
-        const showPreset = () => {
-            preset.value = [...preset.options].some(o => o.value === url.value.trim()) ? url.value.trim() : '';
-        };
-        preset.addEventListener('change', () => {
-            if (preset.value) url.value = preset.value;
-            render();
-        });
-        url.addEventListener('input', () => { showPreset(); render(); });
+        url.addEventListener('change', render);
         tokenSelect.addEventListener('change', render);
-        showPreset();
 
         // The newest token is the one to try. The options are in the order they come in a step.
         let available = '';
@@ -474,6 +464,8 @@ const Parts = (() => {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             store.update({ apiResponse: response });
+            // Straight to the answer, so the presenter doesn't have to scroll.
+            Wrh.role(root, 'result').scrollIntoView({ behavior: 'smooth', block: 'start' });
         }));
     };
 
