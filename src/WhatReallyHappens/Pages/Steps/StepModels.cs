@@ -44,11 +44,6 @@ public class Step3Model(IConfiguration configuration) : StepModel(configuration)
         ["access_token"]);
 }
 
-public class Step4Model(IConfiguration configuration) : StepModel(configuration)
-{
-    public override ChallengeOptions Login => new([("profile", true), ("email", true), (Apis.Scope, true)], ["code"], [], []);
-}
-
 public class Step5Model(IConfiguration configuration) : StepModel(configuration)
 {
     // offline_access is what this step ticks: "and give me a refresh token".

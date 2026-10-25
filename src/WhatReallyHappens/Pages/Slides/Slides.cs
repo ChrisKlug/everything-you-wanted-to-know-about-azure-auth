@@ -18,8 +18,16 @@ public record Table(IReadOnlyList<string> Columns, IReadOnlyList<IReadOnlyList<s
 
 public static class SlideDeck
 {
-    // The steps on the start page. After the last one, Next goes back there.
-    public const int LastStep = 11;
+    // The steps on the start page, in order. Step 4 was cut: steps 1 and 3 cover validation. After the last step, Next
+    // goes back to the start page.
+    public static readonly IReadOnlyList<(int Number, string Title)> Steps =
+    [
+        (1, "App registration and ID token"), (2, "Code flow and access token"), (3, "Calling my own API"),
+        (5, "Refresh tokens across APIs"), (6, "On-Behalf-Of"), (7, "An app with no user"), (8, "Managed identity"),
+        (9, "Cross-tenant with InGen"), (10, "The digest across tenants"), (11, "No secrets anywhere"),
+    ];
+
+    public static int? NextStep(int step) => Steps.Select(s => s.Number).Where(n => n > step).Cast<int?>().FirstOrDefault();
 
     public static readonly IReadOnlyList<Slide> All =
     [
@@ -57,7 +65,7 @@ public static class SlideDeck
                 new(3, 2, "401: not for Graph", Answer: true, Important: true),
             ])),
 
-        new("validation", 4, "How my API knows it's real",
+        new("validation", 3, "How my API knows it's real",
             new(["Calendar API", "Entra"],
             [
                 new(0, 1, "GET /.well-known/openid-configuration  (once)"),

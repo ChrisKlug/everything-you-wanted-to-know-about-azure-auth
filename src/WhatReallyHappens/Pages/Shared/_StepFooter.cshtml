@@ -7,9 +7,9 @@
     {
         <a class="btn btn-outline-dark" href="/slides/@slide.Name">@slide.Title &rarr;</a>
     }
-    @if (Model < SlideDeck.LastStep)
+    @if (SlideDeck.NextStep(Model) is { } next)
     {
-        <a class="btn btn-outline-secondary ms-auto" href="/step-@(Model + 1)">Next: step @(Model + 1) &rarr;</a>
+        <a class="btn btn-outline-secondary ms-auto" href="/step-@next">Next: step @next &rarr;</a>
     }
     else
     {
