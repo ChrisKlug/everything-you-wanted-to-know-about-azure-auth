@@ -20,7 +20,7 @@ const Tokens = (() => {
         [Wrh.page.clientId]: 'Kick-Ass Calendar',
         [Wrh.page.calendarApiClientId]: 'Kick-Ass Calendar API',
         [Wrh.page.digestClientId]: 'Kick-Ass Calendar Digest',
-        'https://kickassdev.se/api': 'Kick-Ass Calendar API',
+        'api://kickassdev.se/calendar': 'Kick-Ass Calendar API',
         '00000003-0000-0000-c000-000000000000': 'Microsoft Graph',
         'https://graph.microsoft.com': 'Microsoft Graph',
     });

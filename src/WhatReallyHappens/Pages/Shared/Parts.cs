@@ -33,9 +33,9 @@ public static class TokenNames
 // The APIs the steps call, by their addresses.
 public static class Apis
 {
-    public const string Scope = "https://kickassdev.se/api/KickAssCalendar.Read";
-    public const string DefaultScope = "https://kickassdev.se/api/.default";
-    public const string AppRoleScope = "https://kickassdev.se/api/KickAssCalendar.Read.All";
+    public const string Scope = "api://kickassdev.se/calendar/KickAssCalendar.Read";
+    public const string DefaultScope = "api://kickassdev.se/calendar/.default";
+    public const string AppRoleScope = "api://kickassdev.se/calendar/KickAssCalendar.Read.All";
 
     public static (string Label, string Url) Graph(string path) => ($"Graph {path.Split('?')[0]}", $"https://graph.microsoft.com/v1.0{path}");
 
