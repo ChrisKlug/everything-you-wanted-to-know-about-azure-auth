@@ -16,13 +16,13 @@ builder.Services.AddAuthentication()
     {
         options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["Entra:TenantId"]}/v2.0";
         options.Audience = builder.Configuration["Entra:ClientId"];
+        options.MapInboundClaims = false;
     });
 builder.Services.AddCalendarAuthorization();
 
 builder.Services.AddHttpClient("graph", client => client.BaseAddress = new Uri("https://graph.microsoft.com/v1.0/"));
 
 var app = builder.Build();
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
