@@ -44,7 +44,7 @@ public class Step3Model(IConfiguration configuration) : StepModel(configuration)
         ["access_token"]);
 }
 
-public class Step5Model(IConfiguration configuration) : StepModel(configuration)
+public class Step4Model(IConfiguration configuration) : StepModel(configuration)
 {
     // offline_access is what this step ticks: "and give me a refresh token".
     public override ChallengeOptions Login => new(
@@ -58,7 +58,7 @@ public class Step5Model(IConfiguration configuration) : StepModel(configuration)
         ["access_token", "refreshed_token"]);
 }
 
-public class Step6Model(IConfiguration configuration) : StepModel(configuration)
+public class Step5Model(IConfiguration configuration) : StepModel(configuration)
 {
     // The trap is the order (the API first), then .default, then prompt=consent.
     public override ChallengeOptions Login => new(
@@ -70,16 +70,16 @@ public class Step6Model(IConfiguration configuration) : StepModel(configuration)
         ["access_token", "obo_token"]);
 }
 
-public class Step7Model(IConfiguration configuration) : StepModel(configuration)
+public class Step6Model(IConfiguration configuration) : StepModel(configuration)
 {
     public override ApiCallOptions Api => new(
         [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/users/damon@kickassdev.se/calendar"), Apis.Calendar(Configuration, "/me")])],
         ["access_token"]);
 }
 
-public class Step8Model(IConfiguration configuration) : StepModel(configuration);
+public class Step7Model(IConfiguration configuration) : StepModel(configuration);
 
-public class Step9Model(IConfiguration configuration) : StepModel(configuration)
+public class Step8Model(IConfiguration configuration) : StepModel(configuration)
 {
     // Any organization's users: the authority is organizations, not my tenant.
     public override ChallengeOptions Login => new(
@@ -90,11 +90,11 @@ public class Step9Model(IConfiguration configuration) : StepModel(configuration)
         ["access_token"]);
 }
 
-public class Step10Model(IConfiguration configuration) : StepModel(configuration);
+public class Step9Model(IConfiguration configuration) : StepModel(configuration);
 
-public class Step11Model(IConfiguration configuration) : StepModel(configuration)
+public class Step10Model(IConfiguration configuration) : StepModel(configuration)
 {
-    // The web's sign-in since step 6, now with no secret.
+    // The web's sign-in since step 5, now with no secret.
     public override ChallengeOptions Login => new([("profile", true), ("email", true), (Apis.DefaultScope, true)], ["code"], [], []);
 
     public override ApiCallOptions Api => new(

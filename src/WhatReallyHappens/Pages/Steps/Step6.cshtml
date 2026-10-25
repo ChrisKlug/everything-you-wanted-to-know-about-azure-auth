@@ -2,46 +2,23 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step6Model
 @{
     ViewData["Title"] = "Step 6";
-    ViewData["Step"] = "Step 6: On-Behalf-Of";
+    ViewData["Step"] = "Step 6: An app with no user";
 }
 
 <div id="step" class="step">
-    <section data-section="challenge" class="step-section collapsible-section">
-        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> The web asks for a token for my API</h2>
-        <div class="step-body">
-            <partial name="_Challenge" model="Model.Login" />
-        </div>
-    </section>
-
-    <section data-section="callback" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">2</span> Entra sends the user back</h2>
-        <partial name="_CallbackView" />
-    </section>
-
-    <section data-section="exchange" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">3</span> The web exchanges the code for tokens</h2>
-        <p class="step-note">The browser shows the request, the server sends it. The secret never leaves the server.</p>
-        <partial name="_Exchange" />
+    <section data-section="client-credentials" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> The digest asks for a token, as itself</h2>
+        <p class="step-note">No redirect, no sign-in, no code. The app's own credentials, straight to the token endpoint.</p>
+        <partial name="_ClientCredentials" />
     </section>
 
     <section data-section="tokens" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">4</span> What the web sends my API</h2>
+        <h2 class="step-heading"><span class="step-number">2</span> What it got</h2>
         <partial name="_TokenPair" model="@(new TokenPairOptions(["access_token"]))" />
     </section>
 
-    <section data-section="obo" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">5</span> My API trades it for a Graph token, as the user</h2>
-        <p class="step-note">The API's request: its own <code>client_id</code> and secret, and the token it was sent.</p>
-        <partial name="_OnBehalfOf" />
-    </section>
-
-    <section data-section="obo-tokens" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">6</span> What my API got</h2>
-        <partial name="_TokenPair" model="@(new TokenPairOptions(["obo_token"]))" />
-    </section>
-
     <section data-section="api" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">7</span> With it, my API calls Graph</h2>
+        <h2 class="step-heading"><span class="step-number">3</span> With it, it calls my API</h2>
         <partial name="_ApiCall" model="Model.Api" />
     </section>
 

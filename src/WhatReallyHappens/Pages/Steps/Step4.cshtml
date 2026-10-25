@@ -1,0 +1,53 @@
+@page "/step-4"
+@model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step4Model
+@{
+    ViewData["Title"] = "Step 4";
+    ViewData["Step"] = "Step 4: Refresh tokens across APIs";
+}
+
+<div id="step" class="step">
+    <section data-section="challenge" class="step-section collapsible-section">
+        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> The app asks for a token for my API, and a refresh token</h2>
+        <div class="step-body">
+            <partial name="_Challenge" model="Model.Login" />
+        </div>
+    </section>
+
+    <section data-section="callback" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">2</span> Entra sends the user back</h2>
+        <partial name="_CallbackView" />
+    </section>
+
+    <section data-section="exchange" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">3</span> The app exchanges the code for tokens</h2>
+        <p class="step-note">The browser shows the request, the server sends it. The secret never leaves the server.</p>
+        <partial name="_Exchange" />
+    </section>
+
+    <section data-section="tokens" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">4</span> What it got</h2>
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["access_token"]))" />
+    </section>
+
+    <section data-section="refresh" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">5</span> It trades the refresh token for a Graph token</h2>
+        <partial name="_Refresh" />
+    </section>
+
+    <section data-section="refreshed" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">6</span> What it got this time</h2>
+        <partial name="_TokenPair" model="@(new TokenPairOptions(["refreshed_token"]))" />
+    </section>
+
+    <section data-section="api" class="step-section" hidden>
+        <h2 class="step-heading"><span class="step-number">7</span> With it, it calls Graph</h2>
+        <partial name="_ApiCall" model="Model.Api" />
+    </section>
+
+    <partial name="_StepFooter" model="4" />
+</div>
+
+@section Scripts {
+    <script src="~/js/parts.js" asp-append-version="true"></script>
+    <script src="~/js/steps/step-4.js" asp-append-version="true"></script>
+}
