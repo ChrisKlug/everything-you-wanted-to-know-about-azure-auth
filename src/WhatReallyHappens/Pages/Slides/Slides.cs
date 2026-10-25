@@ -49,7 +49,7 @@ public static class SlideDeck
         new("one-audience", 3, "One token, one audience",
             new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
             [
-                new(0, 1, "scope=https://kickassdev.se/api/KickAssCalendar.Read"),
+                new(0, 1, "scope=api://kickassdev.se/calendar/KickAssCalendar.Read"),
                 new(1, 0, "access_token  aud: the Calendar API", Answer: true, Important: true),
                 new(0, 2, "GET /calendar  Bearer access_token"),
                 new(2, 2, "aud is me, scp has KickAssCalendar.Read"),

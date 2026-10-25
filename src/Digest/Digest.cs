@@ -50,7 +50,7 @@ public static class Digest
         TokenCredential credential, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger logger)
     {
         // A token for my API, as the digest itself. .default: whatever an admin has granted it.
-        var token = await credential.GetTokenAsync(new TokenRequestContext(["https://kickassdev.se/api/.default"]), default);
+        var token = await credential.GetTokenAsync(new TokenRequestContext(["api://kickassdev.se/calendar/.default"]), default);
 
         using var request = new HttpRequestMessage(HttpMethod.Get,
             $"users/{Uri.EscapeDataString(subscriber.UserPrincipalName)}/calendar?date={date:yyyy-MM-dd}");
