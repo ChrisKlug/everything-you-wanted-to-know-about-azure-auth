@@ -37,8 +37,38 @@ public class PhotoModel(IHttpClientFactory httpClientFactory, IConfiguration con
         return File(await response.Content.ReadAsByteArrayAsync(), response.Content.Headers.ContentType?.MediaType ?? "image/jpeg");
     }
 
-    // The token to call Graph with: whatever access token the sign-in saved.
-    private async Task<string?> GetGraphTokenAsync() => await HttpContext.GetTokenAsync("access_token");
+    // The token to call Graph with. The sign-in's access token is for my API, so trade the refresh token for one for Graph.
+    // In real life, Microsoft.Identity.Web does all of this, and caches the tokens:
+    //   return await tokenAcquisition.GetAccessTokenForUserAsync(["User.Read"]);
+    // with .AddMicrosoftIdentityWebApp(...).EnableTokenAcquisitionToCallDownstreamApi().AddInMemoryTokenCaches()
+    private async Task<string?> GetGraphTokenAsync()
+    {
+        var refreshToken = await HttpContext.GetTokenAsync("refresh_token");
+        if (refreshToken is null)
+        {
+            logger.LogWarning("No refresh token. The sign-in didn't ask for offline_access.");
+            return null;
+        }
+
+        var tokenEndpoint = $"https://login.microsoftonline.com/{configuration["Entra:TenantId"]}/oauth2/v2.0/token";
+        using var response = await httpClientFactory.CreateClient().PostAsync(tokenEndpoint, new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["grant_type"] = "refresh_token",
+            ["client_id"] = configuration["Entra:ClientId"]!,
+            ["client_secret"] = configuration["Entra:ClientSecret"]!,
+            ["refresh_token"] = refreshToken,
+            ["scope"] = "User.Read",
+        }));
+        var body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogWarning("Entra said {Status} to the refresh token: {Body}", (int)response.StatusCode, body);
+            return null;
+        }
+
+        using var json = System.Text.Json.JsonDocument.Parse(body);
+        return json.RootElement.GetProperty("access_token").GetString();
+    }
 
     private IActionResult Placeholder()
     {

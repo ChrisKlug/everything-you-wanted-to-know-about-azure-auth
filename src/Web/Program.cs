@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(options =>
         options.ClientSecret = builder.Configuration["Entra:ClientSecret"];
         options.ResponseType = "code";
         options.Scope.Add("api://kickassdev.se/calendar/KickAssCalendar.Read");
+        options.Scope.Add("offline_access");
         options.SaveTokens = true;
     });
 
