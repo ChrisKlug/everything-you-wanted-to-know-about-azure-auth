@@ -53,17 +53,6 @@ public static class SlideDeck
                 new(3, 1, "the picture", Answer: true),
             ])),
 
-        new("one-audience", 3, "One token, one audience",
-            new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
-            [
-                new(0, 1, "scope=api://kickassdev.se/calendar/KickAssCalendar.Read"),
-                new(1, 0, "access_token  aud: the Calendar API", Answer: true, Important: true),
-                new(0, 2, "GET /calendar  Bearer access_token"),
-                new(2, 2, "aud is me, scp has KickAssCalendar.Read"),
-                new(2, 3, "the same token, passed on"),
-                new(3, 2, "401: not for Graph", Answer: true, Important: true),
-            ])),
-
         new("validation", 3, "How my API knows it's real",
             new(["Calendar API", "Entra"],
             [
@@ -85,6 +74,17 @@ public static class SlideDeck
                 new(0, 3, "GET /me/photo/$value"),
             ])),
 
+        new("one-audience", 5, "One token, one audience",
+            new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
+            [
+                new(0, 1, "scope=api://kickassdev.se/calendar/KickAssCalendar.Read"),
+                new(1, 0, "access_token  aud: the Calendar API", Answer: true, Important: true),
+                new(0, 2, "GET /calendar  Bearer access_token"),
+                new(2, 2, "aud is me, scp has KickAssCalendar.Read"),
+                new(2, 3, "the same token, passed on"),
+                new(3, 2, "401: not for Graph", Answer: true, Important: true),
+            ])),
+
         new("on-behalf-of", 5, "On-Behalf-Of",
             new(["Kick-Ass Calendar", "Calendar API", "Entra", "Graph"],
             [
@@ -99,7 +99,7 @@ public static class SlideDeck
         new("who-consented", 5, "Who consented to what",
             Table: new(["Who may", "Call", "As Damon, for", "Consented"],
             [
-                ["Kick-Ass Calendar", "Graph", "openid profile email User.Read Calendars.Read", "Steps 2 and 6"],
+                ["Kick-Ass Calendar", "Graph", "openid profile email User.Read Calendars.Read", "Steps 2 and 5"],
                 ["Kick-Ass Calendar", "Calendar API", "KickAssCalendar.Read", "Step 3"],
                 ["Calendar API", "Graph", "Calendars.Read", "Step 5, with prompt=consent"],
             ]),
