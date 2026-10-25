@@ -1,20 +1,11 @@
-// Step 6: the web's token for my API, and my API trading it for a Graph token, On-Behalf-Of Damon.
+// Step 6: an app with no user. Its own credentials, a token, and what my API says to it.
 (() => {
-    const exchanged = s => s.exchangeResponse?.status === 200;
     Parts.step('step-6', {
-        challenge: (section, store) => Parts.challenge(section, store, 'step-6'),
-        callback: Parts.callbackView,
-        exchange: Parts.exchange,
+        'client-credentials': Parts.clientCredentials,
         tokens: Parts.tokenPair,
-        obo: Parts.onBehalfOf,
-        'obo-tokens': Parts.tokenPair,
         api: Parts.apiCall,
     }, {
-        callback: s => !!s.callback,
-        exchange: s => !!s.tokens?.code,
-        tokens: exchanged,
-        obo: exchanged,
-        'obo-tokens': s => !!s.tokens?.obo_token,
-        api: s => !!s.tokens?.obo_token,
-    }, { fold: 'challenge' });
+        tokens: s => !!s.tokens?.access_token,
+        api: s => !!s.tokens?.access_token,
+    });
 })();

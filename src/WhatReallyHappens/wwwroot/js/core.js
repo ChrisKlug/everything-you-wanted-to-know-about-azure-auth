@@ -223,7 +223,7 @@ const Wrh = (() => {
         secretMask: '••••••',
         store, signIn, takeCallback, finishCallback, send, busy, randomValue, base64Url,
         renderRequest, renderJson, renderResponse, makeExpandable, unfold, role, collapsible,
-        // My tenant, unless a step says otherwise (organizations, in step 9).
+        // My tenant, unless a step says otherwise (organizations, in step 8).
         endpoint: (name, tenant) => `${document.body.dataset.instance}${tenant ?? document.body.dataset.tenantId}/oauth2/v2.0/${name}`,
         openidConfiguration: tenant => `${document.body.dataset.instance}${tenant ?? document.body.dataset.tenantId}/v2.0/.well-known/openid-configuration`,
         redirectUri: `${window.location.origin}/callback`,

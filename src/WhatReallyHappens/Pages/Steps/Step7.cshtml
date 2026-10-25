@@ -2,24 +2,14 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step7Model
 @{
     ViewData["Title"] = "Step 7";
-    ViewData["Step"] = "Step 7: An app with no user";
+    ViewData["Step"] = "Step 7: Managed identity";
 }
 
 <div id="step" class="step">
-    <section data-section="client-credentials" class="step-section">
-        <h2 class="step-heading"><span class="step-number">1</span> The digest asks for a token, as itself</h2>
-        <p class="step-note">No redirect, no sign-in, no code. The app's own credentials, straight to the token endpoint.</p>
-        <partial name="_ClientCredentials" />
-    </section>
-
-    <section data-section="tokens" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">2</span> What it got</h2>
-        <partial name="_TokenPair" model="@(new TokenPairOptions(["access_token"]))" />
-    </section>
-
-    <section data-section="api" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">3</span> With it, it calls my API</h2>
-        <partial name="_ApiCall" model="Model.Api" />
+    <section data-section="pasted" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> The tokens from the token service's log</h2>
+        <p class="step-note">On my laptop the token service plays Azure: my Google login in, the managed identity's token out. Paste both from its log.</p>
+        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("google_token", "New Google ID token"), ("managed_identity_token", "Token for https://database.windows.net/")])" />
     </section>
 
     <partial name="_StepFooter" model="7" />

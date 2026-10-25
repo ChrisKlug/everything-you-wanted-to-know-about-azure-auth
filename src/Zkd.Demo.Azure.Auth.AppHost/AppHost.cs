@@ -130,7 +130,7 @@ builder.AddProject<Projects.WhatReallyHappens>("what-really-happens")
     .WithEnvironment("CalendarApi__ClientSecret", calendarApiClientSecret)
     .WithEnvironment("Digest__ClientId", digestClientId)
     .WithEnvironment("Digest__ClientSecret", digestClientSecret)
-    // Step 11: the web's managed identity, so the code exchange can do without the secret too.
+    // Step 10: the web's managed identity, so the code exchange can do without the secret too.
     .WithEnvironment("IDENTITY_ENDPOINT", ReferenceExpression.Create($"{tokenService.GetEndpoint("http")}/msi/token"))
     .WithEnvironment("IDENTITY_HEADER", identityHeader)
     .WithEnvironment("Entra__ManagedIdentityResourceId", $"{identities}/kickass-calendar-web")

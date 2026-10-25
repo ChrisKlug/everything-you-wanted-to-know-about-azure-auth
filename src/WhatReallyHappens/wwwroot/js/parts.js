@@ -2,7 +2,7 @@
 const Parts = (() => {
     const formHeaders = [{ name: 'Content-Type', value: 'application/x-www-form-urlencoded' }];
 
-    // How an app proves who it is at the token endpoint. A secret, or (step 11) its managed identity's token.
+    // How an app proves who it is at the token endpoint. A secret, or (step 10) its managed identity's token.
     // Either way it's masked here and filled in by the server.
     const credential = (kind = 'secret') => kind === 'assertion'
         ? [
@@ -186,7 +186,7 @@ const Parts = (() => {
                 line('              ', codeChallenge));
         };
 
-        // The tenant in the URL is bold when it isn't mine: that's the point of step 9.
+        // The tenant in the URL is bold when it isn't mine: that's the point of step 8.
         const urlParts = () => tenant
             ? [[Wrh.page.instance], [tenant, true], ['/oauth2/v2.0/authorize']]
             : [[authorize]];

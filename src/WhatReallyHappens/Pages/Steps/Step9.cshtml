@@ -2,36 +2,14 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step9Model
 @{
     ViewData["Title"] = "Step 9";
-    ViewData["Step"] = "Step 9: Cross-tenant with InGen";
+    ViewData["Step"] = "Step 9: The digest across tenants";
 }
 
 <div id="step" class="step">
-    <section data-section="challenge" class="step-section collapsible-section">
-        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> Signing in: the app sends the user to Entra, any organization</h2>
-        <div class="step-body">
-            <partial name="_Challenge" model="Model.Login" />
-        </div>
-    </section>
-
-    <section data-section="callback" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">2</span> Entra sends the user back</h2>
-        <partial name="_CallbackView" />
-    </section>
-
-    <section data-section="exchange" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">3</span> The app exchanges the code for tokens</h2>
-        <p class="step-note">The browser shows the request, the server sends it. The secret never leaves the server.</p>
-        <partial name="_Exchange" />
-    </section>
-
-    <section data-section="tokens" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">4</span> What it got: look at tid</h2>
-        <partial name="_TokenPair" model="@(new TokenPairOptions(["id_token", "access_token"]))" />
-    </section>
-
-    <section data-section="api" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">5</span> With the access token, it calls my API</h2>
-        <partial name="_ApiCall" model="Model.Api" />
+    <section data-section="pasted" class="step-section">
+        <h2 class="step-heading"><span class="step-number">1</span> Two token requests</h2>
+        <p class="step-note">The first proves who the digest is. The second is who it is in InGen. Paste both from the logs.</p>
+        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("exchange_token", "Token for api://AzureADTokenExchange (token service)"), ("graph_token", "Graph token for Hammond (digest)")])" />
     </section>
 
     <partial name="_StepFooter" model="9" />
