@@ -67,8 +67,35 @@ public static class CalendarEndpoints
             e.Subject, e.Start.DateTime[11..16], e.End.DateTime[11..16], e.Location?.DisplayName)).ToList());
     }
 
-    // The token to call Graph with: the one the caller sent.
-    private static Task<string?> GetGraphTokenAsync(HttpContext context, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger logger) => Task.FromResult(AuthenticationHeaderValue.Parse(context.Request.Headers.Authorization!).Parameter);
+    // The token to call Graph with. The caller's token is for me, so trade it for one for Graph, as the same user: On-Behalf-Of.
+    // In real life, Microsoft.Identity.Web does all of this. In an API, the same call means On-Behalf-Of the caller:
+    //   return await tokenAcquisition.GetAccessTokenForUserAsync(["https://graph.microsoft.com/Calendars.Read"]);
+    // with .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("Entra")).EnableTokenAcquisitionToCallDownstreamApi().AddInMemoryTokenCaches()
+    private static async Task<string?> GetGraphTokenAsync(HttpContext context, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger logger)
+    {
+        var incomingToken = AuthenticationHeaderValue.Parse(context.Request.Headers.Authorization!).Parameter!;
+
+        var tokenEndpoint = $"https://login.microsoftonline.com/{configuration["Entra:TenantId"]}/oauth2/v2.0/token";
+        using var response = await httpClientFactory.CreateClient()
+            .PostAsync(tokenEndpoint, new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                ["grant_type"] = "urn:ietf:params:oauth:grant-type:jwt-bearer",
+                ["client_id"] = configuration["Entra:ClientId"]!,
+                ["client_secret"] = configuration["Entra:ClientSecret"]!,
+                ["assertion"] = incomingToken,
+                ["requested_token_use"] = "on_behalf_of",
+                ["scope"] = "https://graph.microsoft.com/Calendars.Read",
+            }));
+        var body = await response.Content.ReadAsStringAsync();
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogWarning("Entra said {Status} to the On-Behalf-Of request: {Body}", (int)response.StatusCode, body);
+            return null;
+        }
+
+        using var json = System.Text.Json.JsonDocument.Parse(body);
+        return json.RootElement.GetProperty("access_token").GetString();
+    }
 
     // The token to call Graph with when nobody is signed in: my own, with what an admin granted me. Client credentials.
     private static async Task<string?> GetAppGraphTokenAsync(IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger logger)
