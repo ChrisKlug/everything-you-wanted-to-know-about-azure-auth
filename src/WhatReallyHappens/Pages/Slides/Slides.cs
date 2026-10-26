@@ -96,15 +96,6 @@ public static class SlideDeck
                 new(3, 1, "Damon's day", Answer: true),
                 new(1, 0, "Damon's day", Answer: true),
             ])),
-        new("who-consented", 5, "Who consented to what",
-            Table: new(["Who may", "Call", "As Damon, for", "Consented"],
-            [
-                ["Kick-Ass Calendar", "Graph", "openid profile email User.Read Calendars.Read", "Steps 2 and 5"],
-                ["Kick-Ass Calendar", "Calendar API", "KickAssCalendar.Read", "Step 3"],
-                ["Calendar API", "Graph", "Calendars.Read", "Step 5, with prompt=consent"],
-            ]),
-            Points: [".default: what the portal says, not what you ask for at sign-in."]),
-
         new("client-credentials", 6, "An app with no user",
             new(["Digest", "Entra", "Calendar API", "Graph"],
             [
