@@ -99,7 +99,7 @@ public static class SlideDeck
         new("client-credentials", 6, "An app with no user",
             new(["Digest", "Entra", "Calendar API", "Graph"],
             [
-                new(0, 1, "grant_type=client_credentials  scope=…/api/.default  the Digest's secret", Important: true),
+                new(0, 1, "grant_type=client_credentials  scope=…/calendar/.default  the Digest's secret", Important: true),
                 new(1, 0, "access_token  roles: KickAssCalendar.Read.All", Answer: true),
                 new(0, 2, "GET /users/damon@kickassdev.se/calendar"),
                 new(2, 2, "roles has KickAssCalendar.Read.All"),
