@@ -42,14 +42,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Who the API thinks is calling, straight from the token.
-app.MapGet("/me", (HttpContext context) => context.User.Claims.Select(claim => new { claim.Type, claim.Value }))
+app.MapGet("/me", (HttpContext context) => 
+        context.User.Claims.Select(claim => new { claim.Type, claim.Value })
+    )
     .RequireAuthorization();
 
 // The user's own day: a user, through an app.
-app.MapGet("/calendar", CalendarEndpoints.GetCalendarAsync).RequireAuthorization("the scope KickAssCalendar.Read");
+app.MapGet("/calendar", CalendarEndpoints.GetCalendarAsync)
+    .RequireAuthorization("the scope KickAssCalendar.Read");
 
 // Anyone's day, for the nightly digest. Nobody is signed in, so only apps an admin gave the role get in.
-app.MapGet("/users/{id}/calendar", CalendarEndpoints.GetUserCalendarAsync).RequireAuthorization("the app role KickAssCalendar.Read.All");
+app.MapGet("/users/{id}/calendar", CalendarEndpoints.GetUserCalendarAsync)
+    .RequireAuthorization("the app role KickAssCalendar.Read.All");
 
 app.MapDefaultEndpoints();
 
