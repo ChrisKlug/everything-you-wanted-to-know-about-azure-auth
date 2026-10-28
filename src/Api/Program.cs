@@ -1,6 +1,7 @@
 using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSayWhatsMissing();
 
 builder.AddServiceDefaults();
 
@@ -19,14 +20,18 @@ builder.Services.AddAuthentication()
         options.MapInboundClaims = false;
     });
 
-// A valid token says who's calling. These say what they may do.
 builder.Services.AddAuthorizationBuilder()
-    // A user, through an app: the delegated scope. scp is one string, space separated.
-    .AddPolicy("the scope KickAssCalendar.Read", policy => policy.RequireAssertion(context =>
-        context.User.FindFirst("scp")?.Value.Split(' ').Contains("KickAssCalendar.Read") == true))
-    // An app on its own, nobody signed in: the app role an admin granted it. roles is one claim per role.
-    .AddPolicy("the app role KickAssCalendar.Read.All", policy => policy.RequireClaim("roles", "KickAssCalendar.Read.All"));
-builder.Services.AddSayWhatsMissing();
+    .AddPolicy(
+        // A user, through an app: the delegated scope. scp is one string, space separated.
+        "the scope KickAssCalendar.Read", 
+        policy => policy.RequireAssertion(context =>
+            context.User.FindFirst("scp")?.Value.Split(' ').Contains("KickAssCalendar.Read") == true
+        )
+    )
+    .AddPolicy(
+        // An app on its own, nobody signed in: the app role an admin granted it. roles is one claim per role.
+        "the app role KickAssCalendar.Read.All", policy => policy.RequireClaim("roles", "KickAssCalendar.Read.All")
+    );
 
 builder.Services.AddHttpClient("graph", client => client.BaseAddress = new Uri("https://graph.microsoft.com/v1.0/"));
 
@@ -42,6 +47,7 @@ app.MapGet("/me", (HttpContext context) => context.User.Claims.Select(claim => n
 
 // The user's own day: a user, through an app.
 app.MapGet("/calendar", CalendarEndpoints.GetCalendarAsync).RequireAuthorization("the scope KickAssCalendar.Read");
+
 // Anyone's day, for the nightly digest. Nobody is signed in, so only apps an admin gave the role get in.
 app.MapGet("/users/{id}/calendar", CalendarEndpoints.GetUserCalendarAsync).RequireAuthorization("the app role KickAssCalendar.Read.All");
 
