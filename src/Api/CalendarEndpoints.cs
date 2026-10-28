@@ -6,17 +6,7 @@ namespace Microsoft.AspNetCore.Builder;
 // The user's day, from their Outlook calendar.
 public static class CalendarEndpoints
 {
-    // A group, so one more requirement can go on all of them.
-    public static RouteGroupBuilder MapCalendar(this IEndpointRouteBuilder endpoints)
-    {
-        var app = endpoints.MapGroup("");
-        app.MapGet("/calendar", GetCalendarAsync).RequireAuthorization(CalendarAuthorization.Scope);
-        // Anyone's day, for the nightly digest. Nobody is signed in, so only apps an admin gave the role get in.
-        app.MapGet("/users/{id}/calendar", GetUserCalendarAsync).RequireAuthorization(CalendarAuthorization.AppRole);
-        return app;
-    }
-
-    private static async Task<CalendarDay> GetCalendarAsync(DateOnly? date, HttpContext context,
+    public static async Task<CalendarDay> GetCalendarAsync(DateOnly? date, HttpContext context,
         IHttpClientFactory httpClientFactory, IConfiguration configuration, ILoggerFactory loggerFactory)
     {
         var logger = loggerFactory.CreateLogger("CalendarEndpoints");
@@ -24,7 +14,7 @@ public static class CalendarEndpoints
         return await GetDayAsync("me", accessToken, date, httpClientFactory, configuration, logger);
     }
 
-    private static async Task<CalendarDay> GetUserCalendarAsync(string id, DateOnly? date,
+    public static async Task<CalendarDay> GetUserCalendarAsync(string id, DateOnly? date,
         IHttpClientFactory httpClientFactory, IConfiguration configuration, ILoggerFactory loggerFactory)
     {
         var logger = loggerFactory.CreateLogger("CalendarEndpoints");
