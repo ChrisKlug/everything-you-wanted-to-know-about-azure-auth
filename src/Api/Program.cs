@@ -22,14 +22,14 @@ builder.Services.AddAuthentication()
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy(
         // A user, through an app: the delegated scope. scp is one string, space separated.
-        "the scope KickAssCalendar.Read", 
+        AuthPolicies.ReadCalendar,
         policy => policy.RequireAssertion(context =>
             context.User.FindFirst("scp")?.Value.Split(' ').Contains("KickAssCalendar.Read") == true
         )
     )
     .AddPolicy(
         // An app on its own, nobody signed in: the app role an admin granted it. roles is one claim per role.
-        "the app role KickAssCalendar.Read.All", policy => policy.RequireClaim("roles", "KickAssCalendar.Read.All")
+        AuthPolicies.ReadAllCalendars, policy => policy.RequireClaim("roles", "KickAssCalendar.Read.All")
     );
 
 builder.Services.AddHttpClient("graph", client => client.BaseAddress = new Uri("https://graph.microsoft.com/v1.0/"));
@@ -49,11 +49,11 @@ app.MapGet("/me", (HttpContext context) =>
 
 // The user's own day: a user, through an app.
 app.MapGet("/calendar", CalendarEndpoints.GetCalendarAsync)
-    .RequireAuthorization("the scope KickAssCalendar.Read");
+    .RequireAuthorization(AuthPolicies.ReadCalendar);
 
 // Anyone's day, for the nightly digest. Nobody is signed in, so only apps an admin gave the role get in.
 app.MapGet("/users/{id}/calendar", CalendarEndpoints.GetUserCalendarAsync)
-    .RequireAuthorization("the app role KickAssCalendar.Read.All");
+    .RequireAuthorization(AuthPolicies.ReadAllCalendars);
 
 app.MapDefaultEndpoints();
 
