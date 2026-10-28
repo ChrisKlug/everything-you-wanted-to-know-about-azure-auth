@@ -42,7 +42,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Who the API thinks is calling, straight from the token.
-app.MapGet("/me", (HttpContext context) => 
+app.MapGet("/me", (HttpContext context) =>
         context.User.Claims.Select(claim => new { claim.Type, claim.Value })
     )
     .RequireAuthorization();
