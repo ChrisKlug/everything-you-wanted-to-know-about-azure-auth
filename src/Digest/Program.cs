@@ -6,20 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Who the digest is to Entra: its own app registration, and a secret from config. Nobody signs in.
-builder.Services.AddSingleton<TokenCredential>(new ClientSecretCredential(
-    builder.Configuration["Entra:TenantId"], 
-    builder.Configuration["Entra:ClientId"], 
-    builder.Configuration["Entra:ClientSecret"])
+// Who the digest is to Entra: its managed identity. No secret, the platform vouches for it.
+builder.Services.AddSingleton<TokenCredential>(new ManagedIdentityCredential(
+    ManagedIdentityId.FromUserAssignedClientId(builder.Configuration["Entra:ManagedIdentityClientId"]))
 );
 
-// Who wants a digest. A SQL login, with a password.
+// Who wants a digest. No password: the digest's managed identity.
 builder.Services.AddScoped(_ => new SqlConnection(new SqlConnectionStringBuilder
 {
     DataSource = "kickassdev-calendar.database.windows.net",
     InitialCatalog = "kickass-calendar",
-    UserID = "digest",
-    Password = builder.Configuration["Digest:SqlPassword"],
+    Authentication = SqlAuthenticationMethod.ActiveDirectoryManagedIdentity,
+    UserID = builder.Configuration["Entra:ManagedIdentityClientId"],
 }.ConnectionString));
 
 builder.Services.AddHttpClient("calendar-api", client => client.BaseAddress = new Uri("https+http://calendar-api"));

@@ -8,8 +8,8 @@
 <div id="step" class="step">
     <section data-section="pasted" class="step-section">
         <h2 class="step-heading"><span class="step-number">1</span> The tokens from the token service's log</h2>
-        <p class="step-note">On my laptop the token service plays Azure: my Google login in, the managed identity's token out. Paste both from its log.</p>
-        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("google_token", "New Google ID token"), ("managed_identity_token", "Token for https://database.windows.net/")])" />
+        <p class="step-note">On my laptop the token service plays Azure: the managed identity's token out, my Google login in. Paste both from its log.</p>
+        <partial name="_PastedTokens" model="@((IReadOnlyList<(string, string)>)[("managed_identity_token", "Token for https://database.windows.net/"), ("google_token", "New Google ID token")])" />
     </section>
 
     <partial name="_StepFooter" model="7" />
