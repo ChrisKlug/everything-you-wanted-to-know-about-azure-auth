@@ -4,26 +4,13 @@ using Microsoft.AspNetCore.Authorization.Policy;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
-// A valid token says who's calling. These say what they may do. The policy names are what a 403 says is missing.
-public static class CalendarAuthorization
+// A plain 403 has an empty body. 401 is "who are you?", 403 is "I know who you are, and no". This says what's missing.
+public static class SayWhatsMissingExtensions
 {
-    // A user, through an app: the delegated scope. scp is one string, space separated.
-    public const string Scope = "the scope KickAssCalendar.Read";
-
-    // An app on its own, nobody signed in: the app role an admin granted it. roles is one claim per role.
-    public const string AppRole = "the app role KickAssCalendar.Read.All";
-
-    public static IServiceCollection AddCalendarAuthorization(this IServiceCollection services)
-    {
-        services.AddAuthorizationBuilder()
-            .AddPolicy(Scope, policy => policy.RequireAssertion(context =>
-                context.User.FindFirst("scp")?.Value.Split(' ').Contains("KickAssCalendar.Read") == true))
-            .AddPolicy(AppRole, policy => policy.RequireClaim("roles", "KickAssCalendar.Read.All"));
+    // The policies themselves are in Program.cs, where they're shown. Their names are what the 403 says.
+    public static IServiceCollection AddSayWhatsMissing(this IServiceCollection services) =>
         services.AddSingleton<IAuthorizationMiddlewareResultHandler, SayWhatsMissing>();
-        return services;
-    }
 
-    // A plain 403 has an empty body. 401 is "who are you?", 403 is "I know who you are, and no". Say what's missing.
     private class SayWhatsMissing : IAuthorizationMiddlewareResultHandler
     {
         private readonly AuthorizationMiddlewareResultHandler defaultHandler = new();
