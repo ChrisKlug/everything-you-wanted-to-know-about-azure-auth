@@ -20,6 +20,7 @@ builder.Services.AddScoped(_ => new SqlConnection(new SqlConnectionStringBuilder
     UserID = builder.Configuration["Entra:ManagedIdentityClientId"],
 }.ConnectionString));
 
+
 builder.Services.AddHttpClient("calendar-api", client => client.BaseAddress = new Uri("https+http://calendar-api"));
 
 var app = builder.Build();
