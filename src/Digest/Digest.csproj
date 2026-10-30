@@ -14,6 +14,8 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.21.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <!-- SqlClient brings in a vulnerable 9.0.18. -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
     <!-- Step 7: SqlClient 7 keeps Entra authentication (Active Directory Managed Identity and friends) in its own package. -->
     <PackageReference Include="Microsoft.Data.SqlClient.Extensions.Azure" Version="7.1.1" />
   </ItemGroup>
