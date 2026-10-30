@@ -2,14 +2,8 @@
 const Parts = (() => {
     const formHeaders = [{ name: 'Content-Type', value: 'application/x-www-form-urlencoded' }];
 
-    // How an app proves who it is at the token endpoint. A secret, or (step 10) its managed identity's token.
-    // Either way it's masked here and filled in by the server.
-    const credential = (kind = 'secret') => kind === 'assertion'
-        ? [
-            { name: 'client_assertion_type', value: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer', important: true },
-            { name: 'client_assertion', value: Wrh.secretMask, important: true },
-        ]
-        : [{ name: 'client_secret', value: Wrh.secretMask, important: true }];
+    // How an app proves who it is at the token endpoint. Masked here and filled in by the server.
+    const credential = () => [{ name: 'client_secret', value: Wrh.secretMask, important: true }];
 
     const tokensFrom = (response, names = ['id_token', 'access_token', 'refresh_token']) => {
         if (response.status !== 200) return {};
@@ -272,7 +266,7 @@ const Parts = (() => {
     };
 
     // Trade the code for tokens.
-    const exchange = (root, store, { tenant, credential: kind } = {}) => tokenRequest({
+    const exchange = (root, store, { tenant } = {}) => tokenRequest({
         root, store, tenant,
         params: state => [
             { name: 'grant_type', value: 'authorization_code' },
@@ -280,7 +274,7 @@ const Parts = (() => {
             { name: 'code', value: state.tokens?.code ?? '', important: true, shorten: true },
             { name: 'redirect_uri', value: Wrh.redirectUri },
             ...(state.request?.code_verifier ? [{ name: 'code_verifier', value: state.request.code_verifier, important: true }] : []),
-            ...credential(kind),
+            ...credential(),
         ],
         onResponse: (response, state) => ({ tokens: { ...state.tokens, ...tokensFrom(response) } }),
     });
