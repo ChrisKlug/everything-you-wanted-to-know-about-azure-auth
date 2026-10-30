@@ -6,9 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Who the digest is to Entra: its managed identity. No secret, the platform vouches for it.
-builder.Services.AddSingleton<TokenCredential>(new ManagedIdentityCredential(
-    ManagedIdentityId.FromUserAssignedClientId(builder.Configuration["Entra:ManagedIdentityClientId"]))
+// Who the digest is to Entra: its own app registration, in whichever tenant asks. No secret: the managed identity's
+// token is its credential, and the registration's federated credential trusts it.
+var managedIdentity = new ManagedIdentityCredential(
+    ManagedIdentityId.FromUserAssignedClientId(builder.Configuration["Entra:ManagedIdentityClientId"])
+);
+
+builder.Services.AddSingleton<TokenCredential>(new ClientAssertionCredential(
+    builder.Configuration["Entra:TenantId"],
+    builder.Configuration["Entra:ClientId"],
+    async cancellationToken => (await managedIdentity.GetTokenAsync(new(["api://AzureADTokenExchange/.default"]), cancellationToken)).Token,
+    new() { AdditionallyAllowedTenants = { "*" } })
 );
 
 // Who wants a digest. No password: the digest's managed identity.
