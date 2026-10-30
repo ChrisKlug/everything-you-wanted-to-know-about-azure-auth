@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- Step 11: the web's managed identity's token, as client_assertion. -->
-    <PackageReference Include="Azure.Identity" Version="1.21.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="../Zkd.Demo.Azure.Auth.ServiceDefaults/Zkd.Demo.Azure.Auth.ServiceDefaults.csproj" />
   </ItemGroup>
 

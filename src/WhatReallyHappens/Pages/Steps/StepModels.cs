@@ -89,15 +89,3 @@ public class Step8Model(IConfiguration configuration) : StepModel(configuration)
         [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/calendar"), Apis.Calendar(Configuration, "/me")])],
         ["access_token"]);
 }
-
-public class Step9Model(IConfiguration configuration) : StepModel(configuration);
-
-public class Step10Model(IConfiguration configuration) : StepModel(configuration)
-{
-    // The web's sign-in since step 5, now with no secret.
-    public override ChallengeOptions Login => new([("profile", true), ("email", true), (Apis.DefaultScope, true)], ["code"], [], []);
-
-    public override ApiCallOptions Api => new(
-        [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/calendar")])],
-        ["access_token"]);
-}

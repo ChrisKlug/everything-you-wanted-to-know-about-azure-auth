@@ -1,4 +1,3 @@
-using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -17,8 +16,7 @@ public static class ProxyEndpoints
     }
 
     private static async Task<IResult> SendAsync(ProxyRequest request, IHttpClientFactory httpClientFactory,
-        IOptions<EntraOptions> entraOptions, IOptions<ProxyOptions> proxyOptions, IConfiguration configuration,
-        [FromKeyedServices("web")] TokenCredential managedIdentity)
+        IOptions<EntraOptions> entraOptions, IOptions<ProxyOptions> proxyOptions, IConfiguration configuration)
     {
         if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri) || uri.Scheme != Uri.UriSchemeHttps)
         {
@@ -48,18 +46,9 @@ public static class ProxyEndpoints
                 { Length: > 0 } when clientId == configuration["Digest:ClientId"] => configuration["Digest:ClientSecret"] ?? "",
                 _ => entra.ClientSecret,
             };
-            // Step 11: no secret. The web's managed identity's token is the credential, and its registration trusts it.
-            var wantsAssertion = isEntra && request.Form.GetValueOrDefault("client_assertion") == SecretMask;
-            if (wantsAssertion && string.IsNullOrEmpty(configuration["IDENTITY_ENDPOINT"]))
-            {
-                return Results.BadRequest("No managed identity here: IDENTITY_ENDPOINT isn't set.");
-            }
-            var assertion = wantsAssertion
-                ? (await managedIdentity.GetTokenAsync(new(["api://AzureADTokenExchange/.default"]), default)).Token
-                : null;
             message.Content = new FormUrlEncodedContent(request.Form.Select(x =>
-                x.Value == SecretMask && isEntra && x.Key is "client_secret" or "client_assertion"
-                    ? KeyValuePair.Create(x.Key, x.Key == "client_secret" ? secret : assertion!)
+                x.Value == SecretMask && isEntra && x.Key == "client_secret"
+                    ? KeyValuePair.Create(x.Key, secret)
                     : x));
         }
 

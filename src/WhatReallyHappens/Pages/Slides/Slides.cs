@@ -23,7 +23,7 @@ public static class SlideDeck
     [
         (1, "App registration and ID token"), (2, "Code flow and access token"), (3, "Calling my own API"),
         (4, "Refresh tokens across APIs"), (5, "On-Behalf-Of"), (6, "An app with no user"), (7, "Managed identity"),
-        (8, "Cross-tenant with InGen"), (9, "The digest across tenants"), (10, "No secrets anywhere"),
+        (8, "Cross-tenant with InGen"),
     ];
 
     public static int? NextStep(int step) => Steps.Select(s => s.Number).Where(n => n > step).Cast<int?>().FirstOrDefault();
@@ -132,7 +132,7 @@ public static class SlideDeck
 
         new("two-tenants", 8, "Another organization installs it", Grants: new(SecondTenant: true)),
 
-        new("across-tenants", 9, "The digest in InGen's tenant",
+        new("across-tenants", 8, "The digest in InGen's tenant",
             new(["Digest", "Azure platform", "Entra, InGen", "Graph"],
             [
                 new(0, 1, "resource=api://AzureADTokenExchange"),
@@ -141,16 +141,6 @@ public static class SlideDeck
                 new(2, 2, "the Digest trusts my managed identity; Nedry granted Calendars.Read"),
                 new(2, 0, "access_token  tid: InGen  roles: Calendars.Read", Answer: true),
                 new(0, 3, "GET /users/john.hammond@ingendino.se/calendarView"),
-            ])),
-
-        new("no-secrets", 10, "No secrets anywhere",
-            new(["Kick-Ass Calendar", "Azure platform", "Entra"],
-            [
-                new(0, 1, "resource=api://AzureADTokenExchange"),
-                new(1, 0, "the web's managed identity's token", Answer: true),
-                new(0, 2, "POST /token  code + client_assertion=that token", Important: true),
-                new(2, 2, "Kick-Ass Calendar trusts kickass-calendar-web"),
-                new(2, 0, "id_token + access_token", Answer: true),
             ])),
     ];
 
