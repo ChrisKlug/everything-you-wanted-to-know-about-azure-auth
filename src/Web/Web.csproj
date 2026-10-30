@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Zkd.Demo.Azure.Auth.Web</RootNamespace>
+    <!-- Photo.cshtml.cs takes IConfiguration before the step 4 snippet uses it. -->
+    <NoWarn>$(NoWarn);CS9113</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
