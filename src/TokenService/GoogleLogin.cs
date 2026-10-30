@@ -55,7 +55,10 @@ public class GoogleLogin(IHttpClientFactory httpClientFactory, IConfiguration co
         });
         Directory.CreateDirectory(Path.GetDirectoryName(_refreshTokenFile)!);
         await File.WriteAllTextAsync(_refreshTokenFile, json.GetProperty("refresh_token").GetString());
-        File.SetUnixFileMode(_refreshTokenFile, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        if (!OperatingSystem.IsWindows())
+        {
+            File.SetUnixFileMode(_refreshTokenFile, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        }
         _idToken = null;
     }
 
