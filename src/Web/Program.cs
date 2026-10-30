@@ -1,3 +1,5 @@
+using Microsoft.IdentityModel.Validators;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
@@ -14,13 +16,25 @@ builder.Services.AddAuthentication(options =>
     .AddCookie()
     .AddOpenIdConnect(options =>
     {
-        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["Entra:TenantId"]}/v2.0";
+        options.Authority = "https://login.microsoftonline.com/organizations/v2.0";
         options.ClientId = builder.Configuration["Entra:ClientId"];
         options.ClientSecret = builder.Configuration["Entra:ClientSecret"];
         options.ResponseType = "code";
         options.Scope.Add("api://kickassdev.se/calendar/.default");
         options.Scope.Add("offline_access");
         options.SaveTokens = true;
+        options.MapInboundClaims = false;
+        options.TokenValidationParameters.IssuerValidator = AadIssuerValidator.GetAadIssuerValidator(options.Authority).Validate;
+        options.Events.OnTokenValidated = context =>
+        {
+            var tenant = context.Principal!.FindFirst("tid")!.Value;
+            if (!builder.Configuration["Customers:TenantIds"]!.Split(',').Contains(tenant))
+            {
+                context.Response.Redirect($"/magic-word?tenant={tenant}");
+                context.HandleResponse();
+            }
+            return Task.CompletedTask;
+        };
     });
 
 var app = builder.Build();

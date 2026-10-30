@@ -65,7 +65,7 @@ public static class CalendarEndpoints
     {
         var incomingToken = AuthenticationHeaderValue.Parse(context.Request.Headers.Authorization!).Parameter!;
 
-        var tokenEndpoint = $"https://login.microsoftonline.com/{configuration["Entra:TenantId"]}/oauth2/v2.0/token";
+        var tokenEndpoint = $"https://login.microsoftonline.com/{context.User.FindFirst("tid")!.Value}/oauth2/v2.0/token";
         using var response = await httpClientFactory.CreateClient()
             .PostAsync(tokenEndpoint, new FormUrlEncodedContent(new Dictionary<string, string>
             {

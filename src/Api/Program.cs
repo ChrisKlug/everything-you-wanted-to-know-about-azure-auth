@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSayWhatsMissing();
@@ -15,9 +16,10 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddAuthentication()
     .AddJwtBearer(options =>
     {
-        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["Entra:TenantId"]}/v2.0";
+        options.Authority = $"https://login.microsoftonline.com/organizations/v2.0";
         options.Audience = builder.Configuration["Entra:ClientId"];
         options.MapInboundClaims = false;
+        options.TokenValidationParameters.IssuerValidator = AadIssuerValidator.GetAadIssuerValidator(options.Authority).Validate;
     });
 
 builder.Services.AddAuthorizationBuilder()
@@ -47,13 +49,18 @@ app.MapGet("/me", (HttpContext context) =>
     )
     .RequireAuthorization();
 
+// Only customers. In real life the list is the sign-up database.
+var customers = builder.Configuration["Customers:TenantIds"]!.Split(',');
+
 // The user's own day: a user, through an app.
 app.MapGet("/calendar", CalendarEndpoints.GetCalendarAsync)
-    .RequireAuthorization(AuthPolicies.ReadCalendar);
+    .RequireAuthorization(AuthPolicies.ReadCalendar)
+    .RequireAuthorization(policy => policy.RequireClaim("tid", customers));
 
 // Anyone's day, for the nightly digest. Nobody is signed in, so only apps an admin gave the role get in.
 app.MapGet("/users/{id}/calendar", CalendarEndpoints.GetUserCalendarAsync)
-    .RequireAuthorization(AuthPolicies.ReadAllCalendars);
+    .RequireAuthorization(AuthPolicies.ReadAllCalendars)
+    .RequireAuthorization(policy => policy.RequireClaim("tid", customers));
 
 app.MapDefaultEndpoints();
 
