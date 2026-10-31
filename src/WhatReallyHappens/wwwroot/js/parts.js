@@ -114,7 +114,7 @@ const Parts = (() => {
         });
 
         try {
-            const saved = JSON.parse(localStorage.getItem(storageKey) ?? '{}');
+            const saved = JSON.parse(sessionStorage.getItem(storageKey) ?? '{}');
             if (typeof saved.scope === 'string') {
                 const scopes = saved.scope.split(' ');
                 scopeBoxes().forEach(box => box.checked = box.disabled || scopes.includes(box.value));
@@ -131,7 +131,7 @@ const Parts = (() => {
         } catch { /* nothing saved */ }
 
         const save = () => {
-            try { localStorage.setItem(storageKey, JSON.stringify(choices())); } catch { /* storage unavailable */ }
+            try { sessionStorage.setItem(storageKey, JSON.stringify(choices())); } catch { /* storage unavailable */ }
         };
 
         scopeBoxes().forEach(box => box.addEventListener('input', () => {
