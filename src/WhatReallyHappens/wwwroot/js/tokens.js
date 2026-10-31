@@ -84,6 +84,7 @@ const Tokens = (() => {
         const rawButton = Wrh.role(root, 'raw');
         const views = [...root.querySelectorAll('[data-token-view]')].map(view => ({
             name: view.dataset.tokenView,
+            section: view,
             element: Wrh.role(view, 'view'),
             validate: Wrh.role(view, 'validate'),
             decodeOne: Wrh.role(view, 'decode-one'),
@@ -92,6 +93,8 @@ const Tokens = (() => {
 
         const show = (view, state) => {
             const token = getTokens()[view.name];
+            // A token this sign-in didn't give isn't shown. A paste box stays, it's waiting for one.
+            if (!view.element.dataset.empty) view.section.classList.toggle('d-none', !token);
             view.shown = token ? state : 'raw';
             try {
                 if (view.shown === 'raw') raw(view.element, token, view.name);
