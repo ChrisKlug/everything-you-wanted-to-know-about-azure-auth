@@ -488,11 +488,16 @@ const Parts = (() => {
                 folded = !!state.callback;
             });
         }
-        if (returned) section('callback')?.scrollIntoView({ block: 'start' });
+        // Back from Entra: straight to the first section with something to show.
+        if (returned) [...root.querySelectorAll('[data-section]')].find(s => !s.hidden && s.dataset.section !== fold)?.scrollIntoView({ block: 'start' });
         return store;
     };
 
+    // Past step 1 the way back is nothing new. What's worth showing is Entra saying no.
+    const callbackError = state => !!state.callback?.params.some(([name]) => name === 'error');
+
     return {
+        callbackError,
         config, challenge, callbackView, exchange, refresh, onBehalfOf, clientCredentials, tokenPair, pastedTokens, apiCall, step,
     };
 })();

@@ -8,7 +8,7 @@
         tokens: Parts.tokenPair,
         api: Parts.apiCall,
     }, {
-        callback: s => !!s.callback,
+        callback: Parts.callbackError,
         exchange: s => !!s.tokens?.code,
         tokens: exchanged,
         api: exchanged,
