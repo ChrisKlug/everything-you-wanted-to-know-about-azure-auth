@@ -23,12 +23,13 @@ public static class SayWhatsMissingExtensions
                 return;
             }
 
-            // Named policies say it with their name. Inline ones (a list of tenants) by the claim they need, not its values.
-            var metadata = context.GetEndpoint()?.Metadata;
-            var named = metadata?.GetOrderedMetadata<IAuthorizeData>().Select(data => data.Policy).OfType<string>() ?? [];
-            var inline = metadata?.GetOrderedMetadata<AuthorizationPolicy>().SelectMany(p => p.Requirements)
-                .OfType<ClaimsAuthorizationRequirement>().Select(claim => $"a {claim.ClaimType} that's on the list") ?? [];
-            var missing = inline.Concat(named);
+            // Only what failed: a claim by what it is, not its values. A tid list is my customers, and stays out of it.
+            var missing = (authorizeResult.AuthorizationFailure?.FailedRequirements ?? []).Select(requirement => requirement switch
+            {
+                ClaimsAuthorizationRequirement { ClaimType: "tid" } => "a tid that's on the list",
+                ClaimsAuthorizationRequirement { ClaimType: "roles" } => AuthPolicies.ReadAllCalendars,
+                _ => AuthPolicies.ReadCalendar,
+            }).Distinct();
             await Results.Problem(statusCode: StatusCodes.Status403Forbidden, title: "Authenticated, but not authorized",
                 detail: $"This needs {string.Join(" and ", missing)}.").ExecuteAsync(context);
         }
