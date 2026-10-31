@@ -5,8 +5,7 @@ var tenantId = builder.AddParameter("kickass-tenant-id")
 var webClientId = builder.AddParameter("web-client-id")
     .WithDescription("The **Application (client) ID** of the *Kick-Ass Calendar* app registration.", enableMarkdown: true);
 var webClientSecret = builder.AddParameter("web-client-secret", secret: true)
-    .WithDescription("A **client secret** created under *Certificates & secrets* on the *Kick-Ass Calendar* app registration.", enableMarkdown: true)
-    .WithHidden();
+    .WithDescription("A **client secret** created under *Certificates & secrets* on the *Kick-Ass Calendar* app registration.", enableMarkdown: true);
 // Has a default, so the API runs before it's registered.
 var calendarApiClientId = builder.AddParameter("calendar-api-client-id", new PlaceholderDefault("not-registered-yet"))
     .WithDescription("The **Application (client) ID** of the *Kick-Ass Calendar API* app registration.", enableMarkdown: true);
