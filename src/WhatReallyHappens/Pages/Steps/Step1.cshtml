@@ -6,25 +6,20 @@
 }
 
 <div id="step" class="step">
-    <section data-section="config" class="step-section">
-        <h2 class="step-heading"><span class="step-number">1</span> Where is everything?</h2>
-        <partial name="_Config" />
-    </section>
-
-    <section data-section="challenge" class="step-section collapsible-section" data-quiet hidden>
-        <h2 class="step-heading" data-role="toggle"><span class="step-number">2</span> Signing in: the app sends the user to Entra</h2>
+    <section data-section="challenge" class="step-section collapsible-section">
+        <h2 class="step-heading" data-role="toggle"><span class="step-number">1</span> Signing in: the app sends the user to Entra</h2>
         <div class="step-body">
             <partial name="_Challenge" model="Model.Login" />
         </div>
     </section>
 
     <section data-section="callback" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">3</span> Entra sends the user back, with an ID token</h2>
+        <h2 class="step-heading"><span class="step-number">2</span> Entra sends the user back, with an ID token</h2>
         <partial name="_CallbackView" />
     </section>
 
     <section data-section="tokens" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">4</span> What it got</h2>
+        <h2 class="step-heading"><span class="step-number">3</span> What it got</h2>
         <partial name="_TokenPair" model="@(new TokenPairOptions(["id_token"], Validate: true))" />
     </section>
 
