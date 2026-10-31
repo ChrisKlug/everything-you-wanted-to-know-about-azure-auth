@@ -21,9 +21,8 @@ public static class SlideDeck
     // The steps on the start page, in order. After the last step, Next goes back to the start page.
     public static readonly IReadOnlyList<(int Number, string Title)> Steps =
     [
-        (1, "App registration and ID token"), (2, "Code flow and access token"), (3, "Calling my own API"),
-        (4, "Refresh tokens across APIs"), (5, "On-Behalf-Of"), (6, "An app with no user"), (7, "Managed identity"),
-        (8, "Cross-tenant with InGen"),
+        (1, "App registration and ID token"), (2, "Calling my own API"), (3, "Refresh tokens across APIs"),
+        (4, "On-Behalf-Of"), (5, "An app with no user"), (6, "Managed identity"), (7, "Cross-tenant with InGen"),
     ];
 
     public static int? NextStep(int step) => Steps.Select(s => s.Number).Where(n => n > step).Cast<int?>().FirstOrDefault();
@@ -53,7 +52,7 @@ public static class SlideDeck
                 new(3, 1, "the picture", Answer: true),
             ])),
 
-        new("validation", 3, "How my API knows it's real",
+        new("validation", 2, "How my API knows it's real",
             new(["Calendar API", "Entra"],
             [
                 new(0, 1, "GET /.well-known/openid-configuration  (once)"),
@@ -63,7 +62,7 @@ public static class SlideDeck
                 new(0, 0, "every request: key by kid, signature, iss, aud, nbf/exp", Important: true),
             ])),
 
-        new("refresh", 4, "One refresh token, any API",
+        new("refresh", 3, "One refresh token, any API",
             new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
             [
                 new(0, 1, "POST /token  code  (scope: the API + offline_access)"),
@@ -74,7 +73,7 @@ public static class SlideDeck
                 new(0, 3, "GET /me/photo/$value"),
             ])),
 
-        new("one-audience", 5, "One token, one audience",
+        new("one-audience", 4, "One token, one audience",
             new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
             [
                 new(0, 1, "scope=api://kickassdev.se/calendar/KickAssCalendar.Read"),
@@ -85,7 +84,7 @@ public static class SlideDeck
                 new(3, 2, "401: not for Graph", Answer: true, Important: true),
             ])),
 
-        new("on-behalf-of", 5, "On-Behalf-Of",
+        new("on-behalf-of", 4, "On-Behalf-Of",
             new(["Kick-Ass Calendar", "Calendar API", "Entra", "Graph"],
             [
                 new(0, 1, "GET /calendar  Bearer (aud: the Calendar API)"),
@@ -96,7 +95,7 @@ public static class SlideDeck
                 new(3, 1, "Damon's day", Answer: true),
                 new(1, 0, "Damon's day", Answer: true),
             ])),
-        new("client-credentials", 6, "An app with no user",
+        new("client-credentials", 5, "An app with no user",
             new(["Digest", "Entra", "Calendar API", "Graph"],
             [
                 new(0, 1, "grant_type=client_credentials  scope=…/calendar/.default  the Digest's secret", Important: true),
@@ -107,9 +106,9 @@ public static class SlideDeck
                 new(1, 2, "access_token  roles: Calendars.Read", Answer: true),
                 new(2, 3, "GET /users/damon@kickassdev.se/calendarView"),
             ])),
-        new("grants", 6, "Where grants live", Grants: new(SecondTenant: false)),
+        new("grants", 5, "Where grants live", Grants: new(SecondTenant: false)),
 
-        new("managed-identity", 7, "A managed identity, in Azure",
+        new("managed-identity", 6, "A managed identity, in Azure",
             new(["Digest", "Azure platform", "Entra", "SQL, my API"],
             [
                 new(0, 1, "GET $IDENTITY_ENDPOINT?resource=…  X-IDENTITY-HEADER", Important: true),
@@ -118,7 +117,7 @@ public static class SlideDeck
                 new(1, 0, "access_token", Answer: true),
                 new(0, 3, "connect, call, with the token"),
             ])),
-        new("managed-identity-local", 7, "The same, on my laptop",
+        new("managed-identity-local", 6, "The same, on my laptop",
             new(["Digest", "Token service", "Google", "Entra"],
             [
                 new(0, 1, "GET /msi/token?resource=…  X-IDENTITY-HEADER"),
@@ -130,9 +129,9 @@ public static class SlideDeck
                 new(1, 0, "what App Service would answer", Answer: true),
             ])),
 
-        new("two-tenants", 8, "Another organization installs it", Grants: new(SecondTenant: true)),
+        new("two-tenants", 7, "Another organization installs it", Grants: new(SecondTenant: true)),
 
-        new("across-tenants", 8, "The digest in InGen's tenant",
+        new("across-tenants", 7, "The digest in InGen's tenant",
             new(["Digest", "Azure platform", "Entra, InGen", "Graph"],
             [
                 new(0, 1, "resource=api://AzureADTokenExchange"),

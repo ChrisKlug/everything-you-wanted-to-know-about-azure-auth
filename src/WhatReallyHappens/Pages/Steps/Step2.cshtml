@@ -2,7 +2,7 @@
 @model Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Steps.Step2Model
 @{
     ViewData["Title"] = "Step 2";
-    ViewData["Step"] = "Step 2: Code flow and access token";
+    ViewData["Step"] = "Step 2: Calling my own API";
 }
 
 <div id="step" class="step">
@@ -30,7 +30,7 @@
     </section>
 
     <section data-section="api" class="step-section" hidden>
-        <h2 class="step-heading"><span class="step-number">5</span> With the access token, it calls Graph</h2>
+        <h2 class="step-heading"><span class="step-number">5</span> It calls my API</h2>
         <partial name="_ApiCall" model="Model.Api" />
     </section>
 

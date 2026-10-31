@@ -1,4 +1,4 @@
-// Step 3: a token for my API, and calling it.
+// Step 3: one refresh token, a token for another API, no sign-in.
 (() => {
     const exchanged = s => s.exchangeResponse?.status === 200;
     Parts.step('step-3', {
@@ -6,11 +6,15 @@
         callback: Parts.callbackView,
         exchange: Parts.exchange,
         tokens: Parts.tokenPair,
+        refresh: Parts.refresh,
+        refreshed: Parts.tokenPair,
         api: Parts.apiCall,
     }, {
         callback: s => !!s.callback,
         exchange: s => !!s.tokens?.code,
         tokens: exchanged,
-        api: exchanged,
+        refresh: exchanged,
+        refreshed: s => !!s.tokens?.refreshed_token,
+        api: s => !!s.tokens?.refreshed_token,
     }, { fold: 'challenge' });
 })();

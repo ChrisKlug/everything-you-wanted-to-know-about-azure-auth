@@ -180,7 +180,7 @@ const Parts = (() => {
                 line('              ', codeChallenge));
         };
 
-        // The tenant in the URL is bold when it isn't mine: that's the point of step 8.
+        // The tenant in the URL is bold when it isn't mine: that's the point of step 7.
         const urlParts = () => tenant
             ? [[Wrh.page.instance], [tenant, true], ['/oauth2/v2.0/authorize']]
             : [[authorize]];
