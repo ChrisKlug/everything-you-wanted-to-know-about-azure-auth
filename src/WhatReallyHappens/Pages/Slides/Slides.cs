@@ -85,16 +85,20 @@ public static class SlideDeck
             ])),
 
         new("on-behalf-of", 4, "On-Behalf-Of",
-            new(["Kick-Ass Calendar", "Calendar API", "Entra", "Graph"],
+            new(["Kick-Ass Calendar", "Entra", "Calendar API", "Graph"],
             [
-                new(0, 1, "GET /calendar  Bearer (aud: the Calendar API)"),
-                new(1, 2, "grant_type=jwt-bearer  assertion=that token  the API's own secret", Important: true),
-                new(2, 2, "has Damon let the API read his calendar?"),
-                new(2, 1, "access_token  aud: Graph, still Damon", Answer: true),
-                new(1, 3, "GET /me/calendarView"),
-                new(3, 1, "Damon's day", Answer: true),
-                new(1, 0, "Damon's day", Answer: true),
+                new(0, 1, "scope=api://kickassdev.se/calendar/KickAssCalendar.Read"),
+                new(1, 0, "access_token  aud: the Calendar API", Answer: true),
+                new(0, 2, "GET /calendar  Bearer access_token"),
+                new(2, 2, "aud is me, scp has KickAssCalendar.Read"),
+                new(2, 1, "grant_type=jwt-bearer  assertion=that token  the API's own secret", Important: true),
+                new(1, 1, "has Damon let the API read his calendar?"),
+                new(1, 2, "access_token  aud: Graph, still Damon", Answer: true),
+                new(2, 3, "GET /me/calendarView"),
+                new(3, 2, "Damon's day", Answer: true),
+                new(2, 0, "Damon's day", Answer: true),
             ])),
+
         new("client-credentials", 5, "An app with no user",
             new(["Digest", "Entra", "Calendar API", "Graph"],
             [
