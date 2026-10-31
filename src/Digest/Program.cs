@@ -6,28 +6,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Who the digest is to Entra: its own app registration, in whichever tenant asks. No secret: the managed identity's
-// token is its credential, and the registration's federated credential trusts it.
-var managedIdentity = new ManagedIdentityCredential(
-    ManagedIdentityId.FromUserAssignedClientId(builder.Configuration["Entra:ManagedIdentityClientId"])
+// Who the digest is to Entra: its own app registration, and a secret from config. Nobody signs in.
+builder.Services.AddSingleton<TokenCredential>(new ClientSecretCredential(
+    builder.Configuration["Entra:TenantId"], 
+    builder.Configuration["Entra:ClientId"], 
+    builder.Configuration["Entra:ClientSecret"])
 );
 
-builder.Services.AddSingleton<TokenCredential>(new ClientAssertionCredential(
-    builder.Configuration["Entra:TenantId"],
-    builder.Configuration["Entra:ClientId"],
-    async cancellationToken => (await managedIdentity.GetTokenAsync(new(["api://AzureADTokenExchange/.default"]), cancellationToken)).Token,
-    new() { AdditionallyAllowedTenants = { "*" } })
-);
-
-// Who wants a digest. No password: the digest's managed identity.
+// Who wants a digest. A SQL login, with a password.
 builder.Services.AddScoped(_ => new SqlConnection(new SqlConnectionStringBuilder
 {
     DataSource = "kickassdev-calendar.database.windows.net",
     InitialCatalog = "kickass-calendar",
-    Authentication = SqlAuthenticationMethod.ActiveDirectoryManagedIdentity,
-    UserID = builder.Configuration["Entra:ManagedIdentityClientId"],
+    UserID = "digest",
+    Password = builder.Configuration["Digest:SqlPassword"],
 }.ConnectionString));
-
 
 builder.Services.AddHttpClient("calendar-api", client => client.BaseAddress = new Uri("https+http://calendar-api"));
 

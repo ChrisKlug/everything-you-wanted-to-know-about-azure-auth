@@ -45,16 +45,24 @@ public static class Digest
             : Results.Problem($"Sent {sent} of {subscribers.Count}. The reason is in the log.");
     }
 
-    // Their day, straight from Graph, in their own tenant. The digest's own access, granted by their admin.
+    // Their day, from my Calendar API, as the digest itself.
     private static async Task<DigestMail.CalendarDay?> GetDayAsync(Subscriber subscriber, DateOnly date,
         TokenCredential credential, IHttpClientFactory httpClientFactory, IConfiguration configuration, ILogger logger)
     {
-        var token = await credential.GetTokenAsync(
-            new TokenRequestContext(["https://graph.microsoft.com/.default"], tenantId: subscriber.TenantId),
-            CancellationToken.None
-        );
-        return await CalendarGraph.GetDayAsync(subscriber.UserPrincipalName, date, token.Token,
-            httpClientFactory, configuration, logger);
+        // A token for my API, as the digest itself. .default: whatever an admin has granted it.
+        var token = await credential.GetTokenAsync(new TokenRequestContext(["api://kickassdev.se/calendar/.default"]), default);
+
+        using var request = new HttpRequestMessage(HttpMethod.Get,
+            $"users/{Uri.EscapeDataString(subscriber.UserPrincipalName)}/calendar?date={date:yyyy-MM-dd}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.Token);
+        using var response = await httpClientFactory.CreateClient("calendar-api").SendAsync(request);
+        if (!response.IsSuccessStatusCode)
+        {
+            logger.LogWarning("Calendar API said {Status} for {User}: {Body}",
+                (int)response.StatusCode, subscriber.UserPrincipalName, await response.Content.ReadAsStringAsync());
+            return null;
+        }
+        return await response.Content.ReadFromJsonAsync<DigestMail.CalendarDay>();
     }
 
     private static async Task<List<Subscriber>> GetSubscribersAsync(SqlConnection connection)
