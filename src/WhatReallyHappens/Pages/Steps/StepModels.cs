@@ -38,7 +38,7 @@ public class Step3Model(IConfiguration configuration) : StepModel(configuration)
 {
     // offline_access is what this step ticks: "and give me a refresh token".
     public override ChallengeOptions Login => new(
-        [("profile", true), ("email", true), (Apis.Scope, true), ("offline_access", false)], ["code"], [], []);
+        [("profile", true), ("email", true), (Apis.Scope, true), ("offline_access", false)], ["code"], [], [], Pkce: false);
 
     public override ApiCallOptions Api => new(
         [
@@ -53,7 +53,7 @@ public class Step4Model(IConfiguration configuration) : StepModel(configuration)
     // The trap is the order (the API first), then .default, then prompt=consent.
     public override ChallengeOptions Login => new(
         [("profile", true), ("email", true), (Apis.Scope, true), ("Calendars.Read", false), (Apis.DefaultScope, false)],
-        ["code"], [], ["", "consent"]);
+        ["code"], [], ["", "consent"], Pkce: false);
 
     public override ApiCallOptions Api => new(
         [("Microsoft Graph", [Apis.Graph("/me/events?$select=subject,start,end&$top=5")])],
@@ -73,7 +73,7 @@ public class Step7Model(IConfiguration configuration) : StepModel(configuration)
 {
     // Any organization's users: the authority is organizations, not my tenant.
     public override ChallengeOptions Login => new(
-        [("profile", true), ("email", true), (Apis.DefaultScope, true)], ["code"], [], ["select_account", ""]);
+        [("profile", true), ("email", true), (Apis.DefaultScope, true)], ["code"], [], ["select_account", ""], Pkce: false);
 
     public override ApiCallOptions Api => new(
         [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/calendar"), Apis.Calendar(Configuration, "/me")])],

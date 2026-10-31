@@ -33,8 +33,8 @@
                     </select>
                 </label>
             }
-            @* PKCE protects a code, so a step that never asks for one doesn't offer it. *@
-            @if (Model.ResponseTypes.Any(type => type.Split(' ').Contains("code")))
+            @* PKCE protects a code, so a step that never asks for one doesn't offer it. Nor does a step past the one that shows it. *@
+            @if (Model.Pkce && Model.ResponseTypes.Any(type => type.Split(' ').Contains("code")))
             {
                 <div data-role="pkce-option">
                     <div class="panel-title option-label">PKCE</div>

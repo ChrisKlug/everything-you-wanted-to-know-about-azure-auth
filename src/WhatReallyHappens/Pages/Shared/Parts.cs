@@ -5,7 +5,8 @@ public record ChallengeOptions(
     IReadOnlyList<(string Scope, bool Checked)> Scopes,
     IReadOnlyList<string> ResponseTypes,
     IReadOnlyList<string> ResponseModes,
-    IReadOnlyList<string> Prompts)
+    IReadOnlyList<string> Prompts,
+    bool Pkce = true)
 {
     // Scopes that are whole URIs show the last part. .default needs the part before it to say whose it is.
     public static string Label(string scope) =>
