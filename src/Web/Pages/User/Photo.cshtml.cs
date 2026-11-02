@@ -50,7 +50,7 @@ public class PhotoModel(IHttpClientFactory httpClientFactory, IConfiguration con
             return null;
         }
 
-        var tokenEndpoint = $"https://login.microsoftonline.com/{User.FindFirst("tid")!.Value}/oauth2/v2.0/token";
+        var tokenEndpoint = $"https://login.microsoftonline.com/{configuration["Entra:TenantId"]}/oauth2/v2.0/token";
         using var response = await httpClientFactory.CreateClient().PostAsync(tokenEndpoint, new FormUrlEncodedContent(new Dictionary<string, string>
         {
             ["grant_type"] = "refresh_token",
