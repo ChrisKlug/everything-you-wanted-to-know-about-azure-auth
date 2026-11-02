@@ -38,8 +38,8 @@ public static class Apis
     public const string DefaultScope = "api://kickassdev.se/calendar/.default";
     public const string AppRoleScope = "api://kickassdev.se/calendar/KickAssCalendar.Read.All";
 
-    public static (string Label, string Url) Graph(string path) => ($"Graph {path.Split('?')[0]}", $"https://graph.microsoft.com/v1.0{path}");
+    public static (string Label, string Url) Graph(string path) => ($"Graph: {path.Split('?')[0]}", $"https://graph.microsoft.com/v1.0{path}");
 
     public static (string Label, string Url) Calendar(IConfiguration configuration, string path) =>
-        ($"Calendar API {path}", $"{configuration["services:calendar-api:https:0"]?.TrimEnd('/') ?? "https://localhost:7101"}{path}");
+        ($"Calendar API: {path}", $"{configuration["services:calendar-api:https:0"]?.TrimEnd('/') ?? "https://localhost:7101"}{path}");
 }

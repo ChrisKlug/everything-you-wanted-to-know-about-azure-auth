@@ -17,9 +17,9 @@
                     @foreach (var (group, calls) in Model.Presets)
                     {
                         <optgroup label="@group">
-                            @foreach (var (_, url) in calls)
+                            @foreach (var (label, url) in calls)
                             {
-                                <option value="@url">@url</option>
+                                <option value="@url">@label</option>
                             }
                         </optgroup>
                     }
