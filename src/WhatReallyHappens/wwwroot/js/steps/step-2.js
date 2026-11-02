@@ -14,5 +14,5 @@
         exchange: s => !!s.tokens?.code,
         tokens: signedIn,
         api: signedIn,
-    }, { fold: 'challenge' });
+    });
 })();

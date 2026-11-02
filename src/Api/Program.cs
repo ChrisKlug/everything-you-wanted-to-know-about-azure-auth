@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSayWhatsMissing();

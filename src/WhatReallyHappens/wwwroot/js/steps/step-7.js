@@ -12,5 +12,5 @@
         exchange: s => !!s.tokens?.code,
         tokens: exchanged,
         api: exchanged,
-    }, { fold: 'challenge' });
+    });
 })();

@@ -16,5 +16,5 @@
         obo: exchanged,
         'obo-tokens': s => !!s.tokens?.obo_token,
         api: s => !!s.tokens?.obo_token,
-    }, { fold: 'challenge' });
+    });
 })();

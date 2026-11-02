@@ -1,3 +1,5 @@
+using Microsoft.IdentityModel.Validators;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();

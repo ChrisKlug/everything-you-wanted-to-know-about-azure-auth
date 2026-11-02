@@ -470,8 +470,7 @@ const Parts = (() => {
     // Wires up a step page: every part it has, the order its sections unfold in, and what comes back from Entra.
     //   parts: { sectionName: (section, store) => void }
     //   rules: { sectionName: state => bool }
-    //   fold:  the sign-in section's name, folded away once Entra has answered
-    const step = (name, parts, rules, { fold } = {}) => {
+    const step = (name, parts, rules) => {
         const root = document.getElementById('step');
         const section = sectionName => root.querySelector(`[data-section="${sectionName}"]`);
         const store = Wrh.store(name);
@@ -480,16 +479,8 @@ const Parts = (() => {
         for (const [sectionName, mount] of Object.entries(parts)) mount(section(sectionName), store);
         store.onChange(state => Wrh.unfold(root, rules, state));
 
-        if (fold) {
-            const setFolded = Wrh.collapsible(section(fold));
-            let folded;
-            store.onChange(state => {
-                if (!!state.callback !== folded) setFolded(!!state.callback);
-                folded = !!state.callback;
-            });
-        }
         // Back from Entra: straight to the first section with something to show.
-        if (returned) [...root.querySelectorAll('[data-section]')].find(s => !s.hidden && s.dataset.section !== fold)?.scrollIntoView({ block: 'start' });
+        if (returned) [...root.querySelectorAll('[data-section]')].find(s => !s.hidden && s.dataset.section !== 'challenge')?.scrollIntoView({ block: 'start' });
         return store;
     };
 

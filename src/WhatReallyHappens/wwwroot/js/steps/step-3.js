@@ -16,5 +16,5 @@
         refresh: exchanged,
         refreshed: s => !!s.tokens?.refreshed_token,
         api: s => !!s.tokens?.refreshed_token,
-    }, { fold: 'challenge' });
+    });
 })();
