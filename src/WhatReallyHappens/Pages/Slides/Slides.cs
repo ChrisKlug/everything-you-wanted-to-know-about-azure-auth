@@ -99,6 +99,19 @@ public static class SlideDeck
                 new(2, 0, "Damon's day", Answer: true),
             ])),
 
+        new("default-scope", 4, ".default",
+            new(["Kick-Ass Calendar", "Entra", "The web's registration", "The API's registration"],
+            [
+                new(0, 1, "scope=api://kickassdev.se/calendar/.default", Important: true),
+                new(1, 2, "what are the web's permissions on my API?"),
+                new(2, 1, "KickAssCalendar.Read", Answer: true),
+                new(1, 3, "the web is a known client: what does my API need?"),
+                new(3, 1, "Graph: Calendars.Read", Answer: true),
+                new(1, 1, "a screen only if the web is missing something", Important: true),
+                new(1, 0, "access_token  aud: the Calendar API  scp: KickAssCalendar.Read", Answer: true),
+            ]),
+            Points: ["Named scopes: the list comes from the request", ".default: the list comes from the portal"]),
+
         new("client-credentials", 5, "An app with no user",
             new(["Digest", "Entra", "Calendar API", "Graph"],
             [
