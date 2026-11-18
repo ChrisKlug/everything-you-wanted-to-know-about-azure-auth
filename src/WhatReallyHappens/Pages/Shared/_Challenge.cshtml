@@ -2,7 +2,12 @@
 @using Zkd.Demo.Azure.Auth.WhatReallyHappens.Pages.Shared
 
 @* Send the user to Entra. Changes are remembered in the browser, per step. *@
-<form data-role="form" class="row row-cols-1 row-cols-md-2 g-3 mb-4" autocomplete="off">
+@{
+    var settings = new[] { ("response_type", Model.ResponseTypes), ("response_mode", Model.ResponseModes), ("prompt", Model.Prompts) };
+    // Only settings with a choice get a panel. The rest are still sent, and the request shows them.
+    var anyChoice = settings.Any(setting => setting.Item2.Count > 1);
+}
+<form data-role="form" data-pkce="@(Model.Pkce ? "true" : "false")" class="row row-cols-1 row-cols-md-2 g-3 mb-4" autocomplete="off">
     <fieldset class="col">
         <div class="option-panel">
             <legend class="panel-title mono">scope</legend>
@@ -13,9 +18,9 @@
             }
         </div>
     </fieldset>
-    <fieldset class="col">
+    <fieldset class="col" hidden="@(!anyChoice)">
         <div class="option-panel">
-            @foreach (var (name, options) in new[] { ("response_type", Model.ResponseTypes), ("response_mode", Model.ResponseModes), ("prompt", Model.Prompts) })
+            @foreach (var (name, options) in settings)
             {
                 @if (options.Count == 0) continue;
                 @* Nothing to choose: it's still sent, and the request shows it. *@
@@ -32,14 +37,6 @@
                         }
                     </select>
                 </label>
-            }
-            @* PKCE protects a code, so a step that never asks for one doesn't offer it. Nor does a step past the one that shows it. *@
-            @if (Model.Pkce && Model.ResponseTypes.Any(type => type.Split(' ').Contains("code")))
-            {
-                <div data-role="pkce-option">
-                    <div class="panel-title option-label">PKCE</div>
-                    <label class="form-check"><input class="form-check-input" type="checkbox" name="pkce" checked /> <span class="form-check-label">enabled</span></label>
-                </div>
             }
         </div>
     </fieldset>

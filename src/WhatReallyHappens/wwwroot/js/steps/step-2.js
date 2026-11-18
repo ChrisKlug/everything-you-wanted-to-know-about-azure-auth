@@ -1,5 +1,4 @@
 // Step 2: a token for my API. Sign in, see what came back, trade the code, look at the tokens, call the API.
-// With response_type=id_token there's no code, so no exchange: the tokens come straight from the callback.
 (() => {
     const exchanged = s => s.exchangeResponse?.status === 200;
     const signedIn = s => !!(s.tokens?.id_token || s.tokens?.access_token) && (!s.tokens?.code || exchanged(s));

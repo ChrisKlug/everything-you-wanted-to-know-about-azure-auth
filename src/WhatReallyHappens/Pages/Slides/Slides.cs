@@ -21,7 +21,7 @@ public static class SlideDeck
     // The steps on the start page, in order. After the last step, Next goes back to the start page.
     public static readonly IReadOnlyList<(int Number, string Title)> Steps =
     [
-        (1, "App registration and ID token"), (2, "Calling my own API"), (3, "Refresh tokens across APIs"),
+        (2, "Calling my own API"), (3, "Refresh tokens across APIs"),
         (4, "On-Behalf-Of"), (5, "An app with no user"), (6, "Managed identity"), (7, "Cross-tenant with InGen"),
     ];
 
@@ -29,16 +29,6 @@ public static class SlideDeck
 
     public static readonly IReadOnlyList<Slide> All =
     [
-        new("id-token", 1, "Signing in with an ID token",
-            new(["Browser", "Kick-Ass Calendar", "Entra"],
-            [
-                new(0, 2, "GET /authorize  response_type=id_token  scope=openid profile email", Important: true),
-                new(2, 2, "Damon signs in, and consents"),
-                new(2, 0, "302 /callback#id_token=…", Answer: true),
-                new(0, 1, "the id_token, in the fragment or a form post"),
-                new(1, 1, "signature, aud, nonce: Damon is signed in"),
-            ])),
-
         new("code-flow", 2, "The code flow",
             new(["Browser", "Kick-Ass Calendar", "Entra", "Graph"],
             [

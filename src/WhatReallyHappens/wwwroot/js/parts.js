@@ -85,7 +85,6 @@ const Parts = (() => {
     const challenge = (root, store, stepName, { tenant } = {}) => {
         const form = Wrh.role(root, 'form');
         const output = Wrh.role(root, 'request');
-        const pkceOption = Wrh.role(root, 'pkce-option');
         const pkcePanel = Wrh.role(root, 'pkce');
         const pkceOutput = Wrh.role(root, 'pkce-output');
         const sendButton = Wrh.role(root, 'send');
@@ -102,7 +101,8 @@ const Parts = (() => {
 
         const selects = ['response_type', 'response_mode', 'prompt'].filter(name => form.elements[name]);
         const scopeBoxes = () => [...form.querySelectorAll('input[name="scope"]')];
-        const pkceBox = form.elements.pkce;
+        // Not a choice: a step either uses PKCE or it doesn't. The request shows it.
+        const pkce = form.dataset.pkce === 'true';
 
         // Scopes go in the order they're ticked, so the order can be played with. openid always goes first.
         let scopeOrder = scopeBoxes().filter(box => box.checked).map(box => box.value);
@@ -110,7 +110,6 @@ const Parts = (() => {
         const choices = () => ({
             scope: scopeOrder.join(' '),
             ...Object.fromEntries(selects.map(name => [name, form.elements[name].value])),
-            pkce: !!pkceBox?.checked,
         });
 
         try {
@@ -127,7 +126,6 @@ const Parts = (() => {
                     form.elements[name].value = saved[name];
                 }
             }
-            if (typeof saved.pkce === 'boolean' && pkceBox) pkceBox.checked = saved.pkce;
         } catch { /* nothing saved */ }
 
         const save = () => {
@@ -144,7 +142,7 @@ const Parts = (() => {
 
         // PKCE protects the code, so it only applies when a code is asked for.
         const asksForCode = () => responseType().split(' ').includes('code');
-        const usesPkce = () => asksForCode() && !!pkceBox?.checked;
+        const usesPkce = () => asksForCode() && pkce;
 
         const params = () => [
             { name: 'client_id', value: Wrh.page.clientId || '<missing>' },
@@ -165,8 +163,6 @@ const Parts = (() => {
         const buildUrl = () => `${authorize}?${params().map(p => `${p.name}=${encodeURIComponent(p.value)}`).join('&')}`;
 
         const renderPkce = () => {
-            // PKCE only protects a code, so the option is only there when one is asked for.
-            pkceOption?.classList.toggle('d-none', !asksForCode());
             pkcePanel.classList.toggle('d-none', !usesPkce());
             const line = (name, text) => {
                 const element = document.createElement('span');

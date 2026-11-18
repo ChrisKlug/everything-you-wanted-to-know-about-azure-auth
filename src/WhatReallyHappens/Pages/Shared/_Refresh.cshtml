@@ -4,7 +4,7 @@
 <form data-role="form" class="mb-4" autocomplete="off">
     <div class="option-panel d-inline-block pe-5">
         <div class="panel-title mono">scope</div>
-        @foreach (var (scope, isChecked) in new[] { ("User.Read", true), (Apis.Scope, false), ("Calendars.Read", false) })
+        @foreach (var (scope, isChecked) in new[] { ("User.Read", true), ("Calendars.Read", false) })
         {
             <label class="form-check" title="@scope"><input class="form-check-input" type="radio" name="scope" value="@scope" checked="@isChecked" /> <span class="form-check-label mono">@ChallengeOptions.Label(scope)</span></label>
         }

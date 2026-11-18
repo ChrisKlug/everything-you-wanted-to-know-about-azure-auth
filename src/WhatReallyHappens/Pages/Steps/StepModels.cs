@@ -12,25 +12,14 @@ public abstract class StepModel(IConfiguration configuration) : PageModel
     public virtual ApiCallOptions? Api => null;
 }
 
-public class Step1Model(IConfiguration configuration) : StepModel(configuration)
-{
-    // An ID token straight back through the browser. response_mode is the point: fragment, form_post, and query refused.
-    public override ChallengeOptions Login => new(
-        [("profile", true), ("email", true)], ["id_token"], ["fragment", "form_post", "query"], []);
-}
-
 public class Step2Model(IConfiguration configuration) : StepModel(configuration)
 {
-    // Starts with an ID token, to show it can't call anything. code is what this step changes to.
-    // Tick User.Read first to see Entra quietly drop the API's scope.
+    // The code flow, with PKCE. Tick User.Read first to see Entra quietly drop the API's scope.
     public override ChallengeOptions Login => new(
-        [("profile", true), ("email", true), ("User.Read", false), (Apis.Scope, true)], ["id_token", "code"], [], []);
+        [("profile", true), ("email", true), ("User.Read", false), (Apis.Scope, true)], ["code"], [], []);
 
     public override ApiCallOptions Api => new(
-        [
-            ("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/me"), Apis.Calendar(Configuration, "/calendar")]),
-            ("Microsoft Graph", [Apis.Graph("/me"), Apis.Graph("/me/photo/$value")]),
-        ],
+        [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/me")])],
         ["id_token", "access_token"]);
 }
 
@@ -41,10 +30,7 @@ public class Step3Model(IConfiguration configuration) : StepModel(configuration)
         [("profile", true), ("email", true), (Apis.Scope, true), ("offline_access", false)], ["code"], [], [], Pkce: false);
 
     public override ApiCallOptions Api => new(
-        [
-            ("Microsoft Graph", [Apis.Graph("/me/photo/$value"), Apis.Graph("/me")]),
-            ("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/calendar")]),
-        ],
+        [("Microsoft Graph", [Apis.Graph("/me/photo/$value")])],
         ["access_token", "refreshed_token"]);
 }
 
