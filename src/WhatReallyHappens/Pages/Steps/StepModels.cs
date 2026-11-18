@@ -14,9 +14,10 @@ public abstract class StepModel(IConfiguration configuration) : PageModel
 
 public class Step2Model(IConfiguration configuration) : StepModel(configuration)
 {
-    // The code flow, with PKCE. Tick User.Read first to see Entra quietly drop the API's scope.
+    // The code flow, with PKCE. The API's scope starts unticked: its Application ID URI isn't on my domain until
+    // section 2 changes it. Tick User.Read first to see Entra quietly drop the API's scope.
     public override ChallengeOptions Login => new(
-        [("profile", true), ("email", true), ("User.Read", false), (Apis.Scope, true)], ["code"], [], []);
+        [("profile", true), ("email", true), ("User.Read", false), (Apis.Scope, false)], ["code"], [], []);
 
     public override ApiCallOptions Api => new(
         [("Kick-Ass Calendar API", [Apis.Calendar(Configuration, "/me")])],
